@@ -47,34 +47,6 @@ namespace EmployeeManagementSystem.Da
                     .Count(p => p.Status == "Pending")
             };
         }
-
-        // ✅ Employee Dashboard Data (Filtered)
-        public DashboardModel GetEmployeeDashboardData(int employeeId)
-        {
-            return new DashboardModel
-            {
-                TotalEmployees = 0, // not needed for employee
-
-                OnLeaveToday = _context.Leaves
-                    .Count(l => l.EmployeeId == employeeId && l.StartDate <= DateTime.Today && l.EndDate >= DateTime.Today),
-
-                TotalDepartments = 0,
-
-                PendingApprovals = _context.Leaves
-                    .Count(l => l.EmployeeId == employeeId && l.Status == "Pending"),
-
-                PresentToday = _context.Attendance
-                    .Count(a => a.EmployeeId == employeeId && a.Status == "Present"),
-
-                TotalAnnouncements = _context.Announcements.Count(),
-
-                ApprovedLeaves = _context.Leaves
-                    .Count(l => l.EmployeeId == employeeId && l.Status == "Approved"),
-
-                PendingPayroll = _context.Payroll
-                    .Count(p => p.EmployeeId == employeeId && p.Status == "Pending")
-            };
-        }
         public (int approved, int pending) GetLeaveStatusChart()
         {
             var approved = _context.Leaves.Count(l => l.Status == "Approved");
@@ -103,6 +75,49 @@ namespace EmployeeManagementSystem.Da
             return data;
         }
 
+        // ✅ Employee Dashboard Data
+        public EmployeeDashboardModel GetEmployeeDashboard(int empId)
+        {
+            return new EmployeeDashboardModel
+            {
+                TotalLeaves = _context.Leaves.Count(l => l.EmployeeId == empId),
+                ApprovedLeaves = _context.Leaves.Count(l => l.EmployeeId == empId && l.Status == "Approved"),
+                PendingLeaves = _context.Leaves.Count(l => l.EmployeeId == empId && l.Status == "Pending"),
+                PresentDays = _context.Attendance.Count(a => a.EmployeeId == empId && a.Status == "Present")
+            };
+        }
+        // 🔹 Leave Chart
+        public object GetEmployeeLeaveChart(int empId)
+        {
+            var approved = _context.Leaves.Count(l => l.EmployeeId == empId && l.Status == "Approved");
+            var pending = _context.Leaves.Count(l => l.EmployeeId == empId && l.Status == "Pending");
+
+            return new { approved, pending };
+        }
+        // 🔹 Attendance Chart
+        public object GetAttendanceChart(int empId)
+        {
+            var present = _context.Attendance
+                .Count(a => a.EmployeeId == empId && a.Status == "Present");
+
+            var total = _context.Attendance
+                .Count(a => a.EmployeeId == empId);
+
+            var absent = total - present;
+
+            return new { present, absent };
+        }
+        // 🔹 Salary Chart
+        public object GetSalaryChart(int empId)
+        {
+            var paid = _context.Payroll
+                .Count(p => p.EmployeeId == empId && p.Status == "Paid");
+
+            var pending = _context.Payroll
+                .Count(p => p.EmployeeId == empId && p.Status == "Pending");
+
+            return new { paid, pending };
+        }
 
     }
 }

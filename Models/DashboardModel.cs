@@ -12,4 +12,12 @@
         public int ApprovedLeaves { get; set; }
         public int PendingPayroll { get; set; }
     }
+    public class EmployeeDashboardModel
+    {
+        public int TotalLeaves { get; set; }
+        public int ApprovedLeaves { get; set; }
+        public int PendingLeaves { get; set; }
+        public int PresentDays { get; set; }
+    }
+
 }

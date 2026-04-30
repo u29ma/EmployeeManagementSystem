@@ -39,6 +39,7 @@ namespace EmployeeManagementSystem.Controllers
                 HttpContext.Session.SetString("Role", user.Role);
                 HttpContext.Session.SetString("UserId", user.UserId.ToString());
                 HttpContext.Session.SetString("UserName", user.Username);
+                HttpContext.Session.SetString("EmployeeId", user.EmployeeId.ToString());
 
                 // 🔹 Employee Mapping
                 var employee = _da.GetEmployeeByUserId(user.UserId);
