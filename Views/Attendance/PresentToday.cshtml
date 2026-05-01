@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<AttendanceModel>
+
+<h3>Present Employees Today</h3>
+
+<table class="table table-striped">
+    <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Employee.FirstName @item.Employee.LastName</td>
+            <td>@item.Date.ToShortDateString()</td>
+            <td><span class="badge bg-success">Present</span></td>
+        </tr>
+    }
+</table>
+

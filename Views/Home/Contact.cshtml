@@ -1,0 +1,95 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<style>
+    .contact-container {
+        max-width: 1100px;
+        margin: 60px auto;
+        display: flex;
+        flex-wrap: wrap;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .contact-left {
+        flex: 1;
+        padding: 30px;
+    }
+
+    .contact-right {
+        flex: 1;
+        background: #ff7a00;
+        color: white;
+        padding: 30px;
+    }
+
+    .contact-title {
+        color: #ff7a00;
+        margin-bottom: 15px;
+    }
+
+    .input-box {
+        margin-bottom: 15px;
+    }
+
+        .input-box input, .input-box textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+    .btn {
+        background: #ff7a00;
+        color: white;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .btn:hover {
+            background: #e66900;
+        }
+</style>
+
+<div class="contact-container">
+
+    <!-- LEFT -->
+    <div class="contact-left">
+        <h2 class="contact-title">Contact Us</h2>
+
+        <form>
+            <div class="input-box">
+                <input type="text" placeholder="Your Name" required />
+            </div>
+
+            <div class="input-box">
+                <input type="email" placeholder="Your Email" required />
+            </div>
+
+            <div class="input-box">
+                <textarea rows="4" placeholder="Your Message"></textarea>
+            </div>
+
+            <button class="btn">Send Message</button>
+        </form>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="contact-right">
+        <h3>Get in Touch</h3>
+        <p>Email: support@ems.com</p>
+        <p>Phone: +91 9878065432</p>
+        <p>Location: India</p>
+    </div>
+
+</div>
+

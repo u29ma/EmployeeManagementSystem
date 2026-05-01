@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    
+}
+@model List<EmployeeManagementSystem.Models.PayrollModel>
+
+<h2>My Salary</h2>
+
+<table class="table">
+    <tr>
+        <th>Month</th>
+        <th>Year</th>
+        <th>Salary</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.SalaryMonth</td>
+            <td>@item.SalaryYear</td>
+            <td>@item.NetSalary</td>
+            <td>@item.Status</td>
+        </tr>
+    }
+</table>
+

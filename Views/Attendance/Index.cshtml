@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@* @{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Attendance</h2>
+
+<a href="/Attendance/CheckIn" class="btn btn-success">Check In</a>
+<a href="/Attendance/CheckOut" class="btn btn-danger">Check Out</a>
+<a href="/Attendance/MyAttendance" class="btn btn-primary">View My Attendance</a>
+ *@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>Attendance</h2>
+
+<a href="/Attendance/CheckIn" class="btn btn-success">Check In</a>
+<a href="/Attendance/CheckOut" class="btn btn-danger">Check Out</a>
+
+<button id="btnView" class="btn btn-primary">View My Attendance</button>
+
+<hr />
+
+<div id="attendanceContainer"></div>
+
+@section Scripts {
+    <script>
+        // document.getElementById("btnView").addEventListener("click", function () {
+
+        //     fetch('/Attendance/GetMyAttendance')
+        //         .then(res => res.text())
+        //         .then(data => {
+        //             document.getElementById("attendanceContainer").innerHTML = data;
+        //         });
+
+        // });
+                let visible = false;
+
+        document.getElementById("btnView").addEventListener("click", function () {
+
+            if (visible) {
+                document.getElementById("attendanceContainer").innerHTML = "";
+                visible = false;
+                return;
+            }
+
+            fetch('/Attendance/GetMyAttendance')
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("attendanceContainer").innerHTML = data;
+                    visible = true;
+                });
+        });
+
+    </script>
+}
+

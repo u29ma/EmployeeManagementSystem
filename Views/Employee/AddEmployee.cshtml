@@ -1,0 +1,164 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+
+@model EmployeeManagementSystem.Models.EmployeeModel
+
+@{
+    ViewData["Title"] = "Add Employee";
+}
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .card-header {
+        font-weight: 500;
+        font-size: 18px;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        height: 40px;
+    }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .btn {
+        border-radius: 6px;
+    }
+
+</style>
+
+<div class="container mt-3">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Add New Employee</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="AddEmployee" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row">
+
+                    <!-- First Name -->
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        <input asp-for="FirstName" class="form-control" type="text" placeholder="Enter first name" />
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="col-md-6 mb-3">
+                        <label>Last Name</label>
+                        <input asp-for="LastName" class="form-control" type="text" placeholder="Enter last name" />
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="col-md-6 mb-3">
+                        <label>Gender</label>
+                        <select asp-for="Gender" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+
+                    <!-- DOB -->
+                    <div class="col-md-6 mb-3">
+                        <label>Date of Birth</label>
+                        <input asp-for="DOB" type="date" class="form-control" />
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="col-md-6 mb-3">
+                        <label>Phone</label>
+                        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                    </div>
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        <input type="email" name="email" class="form-control" placeholder="Enter email" />
+                    </div>
+
+                    <!-- Password -->
+                    <div class="col-md-6 mb-3">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Enter password" />
+                    </div>
+
+
+                    <!-- Department -->
+                    @* <div class="col-md-6 mb-3">
+                        <label>Department</label>
+                        <input asp-for="DepartmentId" class="form-control" placeholder="Enter department id" />
+                    </div> *@
+                    <div class="col-md-6 mb-3">
+                        <label>Department</label>
+                        <select asp-for="DepartmentId" class="form-select">
+                            <option value="">-- Select Department --</option>
+
+                            @foreach (var dept in ViewBag.Departments)
+                            {
+                                <option value="@dept.DepartmentId">
+                                    @dept.DepartmentName
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Designation -->
+                    <div class="col-md-6 mb-3">
+                        <label>Designation</label>
+                        <input asp-for="Designation" class="form-control" placeholder="Enter designation" />
+                    </div>
+
+                    <!-- Joining Date -->
+                    <div class="col-md-6 mb-3">
+                        <label>Joining Date</label>
+                        <input asp-for="JoiningDate" type="date" class="form-control" />
+                    </div>
+
+                    <!-- Salary -->
+                    <div class="col-md-6 mb-3">
+                        <label>Salary</label>
+                        <input asp-for="Salary" class="form-control" placeholder="Enter salary" />
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6 mb-3">
+                        <label>Status</label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">-- Select Status --</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                            @* <option>Active</option>
+                            <option>Inactive</option> *@
+                        </select>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="col-md-12 mb-3">
+                        <label>Address</label>
+                        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success px-4">Save</button>
+                    <a href="/Employee/EmployeeList" class="btn btn-secondary px-4">Cancel</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

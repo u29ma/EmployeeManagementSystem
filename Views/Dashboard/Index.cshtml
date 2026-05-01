@@ -1,0 +1,104 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    ViewData["Title"] = "Employee Dashboard";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container-fluid mt-4">
+    <h3>Welcome, @Context.Session.GetString("UserName")!</h3>
+    @* <span>Welcome, @Context.Session.GetString("Username")</span> *@
+    <p class="text-muted">Here’s what’s happening with your team today.</p>
+
+    <div class="row mt-4">
+
+        <!-- Total Employees -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h6>Total Employees</h6>
+                    <h3>@ViewBag.TotalEmployees</h3>
+                    <a href="/Employee" class="text-white">View List</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- On Leave -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h6>On Leave Today</h6>
+                    <h3>@ViewBag.OnLeave</h3>
+                    <a href="#" class="text-white">View List</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h6>Total Departments</h6>
+                    <h3>@ViewBag.Departments</h3>
+                    <a href="/Department" class="text-white">View List</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Approvals -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h6>Pending Approvals</h6>
+                    <h3>@ViewBag.Pending</h3>
+                    <a href="#" class="text-white">View List</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Second Row -->
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h6>Present Today</h6>
+                    <h3>@ViewBag.Present</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h6>Total Announcements</h6>
+                    <h3>@ViewBag.Announcements</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h6>Approved Leave</h6>
+                    <h3>@ViewBag.ApprovedLeave</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h6>Pending Payrolls</h6>
+                    <h3>@ViewBag.Payroll</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

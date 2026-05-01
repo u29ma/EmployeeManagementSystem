@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    ViewData["Title"] = "Leave";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Leave Management For Employee</h2>
+
+    <div class="row">
+
+        <!-- Apply Leave -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow p-3 text-center">
+                <h5>Apply Leave</h5>
+                <p>Submit a new leave request</p>
+                <a href="/LeaveManagement/ApplyLeave" class="btn btn-primary">Apply</a>
+            </div>
+        </div>
+
+        <!-- My Leaves -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow p-3 text-center">
+                <h5>My Leaves</h5>
+                <p>Check your leave status</p>
+                <a href="/LeaveManagement/MyLeaves" class="btn btn-success">View</a>
+            </div>
+        </div>
+
+        <!-- Leave Balance -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow p-3 text-center">
+                <h5>Leave Balance</h5>
+                <p>View available leave balance</p>
+                <a href="#" class="btn btn-warning">Check</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick Info Section -->
+    <div class="card mt-4 p-3 shadow">
+        <h5>Quick Info</h5>
+        <ul>
+            <li>You can apply for leave anytime</li>
+            <li>Approval depends on admin</li>
+            <li>Check status regularly</li>
+        </ul>
+    </div>
+</div>
+

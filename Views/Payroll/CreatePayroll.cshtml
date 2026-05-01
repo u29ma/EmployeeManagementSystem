@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+   
+}
+@model EmployeeManagementSystem.Models.PayrollModel
+
+<h2>Create Payroll</h2>
+
+<form asp-action="CreatePayroll" method="post">
+
+    <div>
+        <label>Employee Id</label>
+        <input asp-for="EmployeeId" class="form-control" />
+    </div>
+
+    <div>
+        <label>Basic Salary</label>
+        <input asp-for="BasicSalary" class="form-control" />
+    </div>
+
+    <div>
+        <label>Bonus</label>
+        <input asp-for="Bonus" class="form-control" />
+    </div>
+
+    <div>
+        <label>Deductions</label>
+        <input asp-for="Deductions" class="form-control" />
+    </div>
+
+    <div>
+        <label>Month</label>
+        <input asp-for="SalaryMonth" class="form-control" />
+    </div>
+
+    <div>
+        <label>Year</label>
+        <input asp-for="SalaryYear" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Save</button>
+
+</form>

@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+   
+}
+@model List<AnnouncementModel>
+
+<h2>📢 All Announcements</h2>
+
+<a href="/Announcement/Create" class="btn btn-primary mb-3">Add New</a>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Title</th>
+        <th>Message</th>
+        <th>Role</th>
+        <th>Priority</th>
+        <th>Date</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Title</td>
+            <td>@item.Message</td>
+            <td>@item.TargetRole</td>
+            <td>@item.Priority</td>
+            <td>@item.CreatedAt.ToString("dd MMM yyyy")</td>
+        </tr>
+    }
+</table>
+

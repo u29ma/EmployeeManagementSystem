@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+   
+}
+@model AnnouncementModel
+
+<h2>Add Announcement</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="form-group">
+        <label>Title</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Message</label>
+        <textarea asp-for="Message" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Target Role</label>
+        <select asp-for="TargetRole" class="form-control">
+            <option value="All">All</option>
+            <option value="Employee">Employee</option>
+            <option value="Admin">Admin</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Priority</label>
+        <select asp-for="Priority" class="form-control">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Expiry Date</label>
+        <input asp-for="ExpiryDate" type="date" class="form-control" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Save</button>
+</form>
+

@@ -1,0 +1,94 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using System.Linq
+@model IEnumerable<EmployeeManagementSystem.Models.LeaveManagementModel>
+
+@{
+    Layout = "~/Views/Shared/_layout1.cshtml";
+    ViewData["Title"] = "My Leaves";
+}
+@* @model EmployeeManagementSystem.Models.LeaveManagementModel *@
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .table th {
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+</style>
+<div class="container-fluid">
+
+    <div class="card shadow-sm p-3">
+        <h4 class="mb-3">My Leave Requests</h4>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Leave Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Reason</th>
+                    <th>Applied Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <!-- Leave Type Name -->
+                            <td>
+                                @(item.LeaveType != null ? item.LeaveType.LeaveName : item.LeaveTypeId)
+                            </td>
+
+                            <td>@item.StartDate.ToString("dd-MM-yyyy")</td>
+                            <td>@item.EndDate.ToString("dd-MM-yyyy")</td>
+
+                            <td>@item.Reason</td>
+
+                            <td>@item.AppliedDate.ToString("dd-MM-yyyy")</td>
+
+                            <!-- Status Badge -->
+                            <td>
+                                @if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                                else if (item.Status == "Approved")
+                                {
+                                    <span class="badge bg-success">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">
+                            No leave records found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

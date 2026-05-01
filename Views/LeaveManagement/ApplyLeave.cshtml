@@ -1,0 +1,87 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    ViewData["Title"] = "Apply Leave";
+}
+@* @model IEnumerable<EmployeeManagementSystem.Models.LeaveManagementModel> *@
+@model EmployeeManagementSystem.Models.LeaveManagementModel
+
+<style>
+    .card {
+        border-radius: 12px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #ff7a00;
+        }
+
+    h3 {
+        font-weight: 600;
+    }
+
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h3 class="text-center mb-4 text-primary">Apply for Leave</h3>
+
+        <form method="post" asp-action="ApplyLeave">
+            
+            <div class="mb-3">
+                <label class="form-label">Leave Type</label>
+                <select asp-for="LeaveTypeId" class="form-control">
+                    <option value="">-- Select Leave Type --</option>
+                    @foreach (var item in ViewBag.LeaveTypes)
+                    {
+                        <option value="@item.LeaveTypeId">@item.LeaveName</option>
+                    }
+                </select>
+
+                <span asp-validation-for="LeaveTypeId" class="text-danger"></span>
+
+
+               @*  <select class="form-control" name="LeaveTypeId" required>
+                    <option value="">-- Select Leave Type --</option>
+                    @foreach (var item in ViewBag.LeaveTypes)
+                    {
+                        <option value="@item.LeaveTypeId">@item.LeaveName</option>
+                    }
+                </select> *@
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Start Date</label>
+                    <input asp-for="StartDate" type="date" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                    @* <input type="date" name="StartDate" class="form-control" required /> *@
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label>End Date</label>
+                    <input asp-for="EndDate" type="date" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                   @*  <input type="date" name="EndDate" class="form-control" required /> *@
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label>Reason</label>
+                <textarea asp-for="Reason" class="form-control"></textarea>
+                <span asp-validation-for="Reason" class="text-danger"></span>
+               @*  <textarea name="Reason" class="form-control" rows="3" placeholder="Enter reason..." required></textarea> *@
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Submit Leave</button>
+
+        </form>
+    </div>
+</div>
+

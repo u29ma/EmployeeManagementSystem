@@ -1,0 +1,196 @@
+﻿
+@model EmployeeManagementSystem.Models.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+            body {
+                margin: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background: #f4f6f9;
+            }
+
+            .container {
+                min-height: 70vh;
+                display: flex;
+                justify-content: center;
+                align-items: flex-start; /* move to top */
+                padding-top: 30px; /* add some space from top */
+            }
+
+
+            .login-box {
+                width: 100%;
+                max-width: 900px;
+                display: flex;
+                flex-wrap: wrap;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+                background: #fff;
+            }
+
+            /* LEFT */
+            .left {
+                flex: 1;
+                min-width: 300px;
+                padding: 40px 30px;
+            }
+
+            .logo {
+                text-align: center;
+                color: #ff7a00;
+                margin-bottom: 20px;
+            }
+
+            .input-box {
+                margin-bottom: 15px;
+            }
+
+                .input-box label {
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: #333;
+                }
+
+                .input-box input {
+                    width: 100%;
+                    height: 38px;
+                    margin-top: 5px;
+                    padding: 0 10px;
+                    border-radius: 8px;
+                    border: 1px solid #ccc;
+                    transition: 0.2s;
+                }
+
+                    .input-box input:focus {
+                        outline: none;
+                        border-color: #ff7a00;
+                        box-shadow: 0 0 5px rgba(255,122,0,0.3);
+                    }
+
+            .btn {
+                width: 100%;
+                height: 40px;
+                border: none;
+                background: #ff7a00;
+                color: white;
+                border-radius: 8px;
+                font-weight: bold;
+                margin-top: 10px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+                .btn:hover {
+                    background: #e66900;
+                }
+
+            .error {
+                color: red;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .action-links {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+                font-size: 14px;
+            }
+
+                .action-links a {
+                    text-decoration: none;
+                    color: tomato;
+                }
+
+                    .action-links a:hover {
+                        text-decoration: underline;
+                    }
+
+            /* RIGHT */
+            .right {
+                flex: 1;
+                min-width: 300px;
+            }
+
+                .right img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            /* 📱 MOBILE VIEW */
+            @@media (max-width: 768px) {
+                .login-box {
+                    flex-direction: column;
+                }
+
+                .right {
+                    height: 200px;
+                }
+
+                .left {
+                    padding: 20px;
+                }
+            }
+    </style>
+
+    <title>Login - EMS</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="login-box">
+
+            <!-- LEFT -->
+            <div class="left">
+                <h2 class="logo">Welcome Back!</h2>
+
+                <form method="post" asp-action="Login" asp-controller="Account">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="error">@ViewBag.Error</div>
+                    }
+
+                    <div class="input-box">
+                        <label>Email</label>
+                        <input type="email" asp-for="Email" placeholder="Enter your email" required />
+                        <span asp-validation-for="Email" style="color:red"></span>
+                    </div>
+
+                    <div class="input-box">
+                        <label>Password</label>
+                        <input type="password" asp-for="Password" placeholder="Enter password" required />
+                        <span asp-validation-for="Password" style="color:red"></span>
+                    </div>
+
+                    <button type="submit" class="btn">Log in</button>
+
+                    <div class="action-links">
+                        <a href="/Account/Register">Create Account</a>
+                        <a asp-action="ForgotPassword" asp-controller="Account">Forgot Password?</a>
+                        @* a href="#">Forgot Password?</a> *@
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="right">
+                <img src="~/images/log1.jfif" alt="Office Image" />
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

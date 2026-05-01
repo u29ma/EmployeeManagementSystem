@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+   
+}
+@model List<AnnouncementModel>
+
+<h2>📢 Announcements</h2>
+
+@foreach (var item in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>@item.Title</strong>
+
+            @if (item.Priority == "High")
+            {
+                <span class="badge bg-danger">High</span>
+            }
+            else if (item.Priority == "Medium")
+            {
+                <span class="badge bg-warning">Medium</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Low</span>
+            }
+        </div>
+
+        <div class="card-body">
+            <p>@item.Message</p>
+            <small>@item.CreatedAt.ToString("dd MMM yyyy")</small>
+        </div>
+    </div>
+}
+

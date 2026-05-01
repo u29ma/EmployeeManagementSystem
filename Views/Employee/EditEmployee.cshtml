@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@model EmployeeManagementSystem.Models.EmployeeModel
+
+<form asp-action="EditEmployee" method="post">
+    
+    <input type="hidden" asp-for="EmployeeId" />
+    <input type="hidden" asp-for="UserId" /> 
+   @*  <input type="hidden" asp-for="Phone" />
+    <input type="hidden" asp-for="Address" />
+    <input type="hidden" asp-for="Designation" />
+ *@
+    <div class="form-group">
+        <label>First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+
+    <!-- ✅ FIX -->
+    <div class="form-group">
+        <label>Department</label>
+        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments">
+            <option value="">-- Select Department --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Gender</label>
+        <input asp-for="Gender" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>DOB</label>
+        <input asp-for="DOB" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Address</label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Designation</label>
+        <input asp-for="Designation" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Joining Date</label>
+        <input asp-for="JoiningDate" type="date" class="form-control" />
+    </div>
+
+
+    <div class="form-group">
+        <label>Salary</label>
+        <input asp-for="Salary" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="Status" class="form-control">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Update</button>
+</form>
