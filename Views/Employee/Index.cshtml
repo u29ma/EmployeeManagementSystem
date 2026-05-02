@@ -1,20 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 @model IEnumerable<EmployeeManagementSystem.Models.EmployeeModel>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+    .btn-add {
+        background-color: darkorange;
+        color: white;
+        border: none;
+        width:185px;
+    }
+    .btn-add:hover {
+        background-color: orangered;
+        color: white;
+    }
 
+</style>
 <div class="container-fluid mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3>View Employees</h3>
-        <a href="/Employee/AddEmployee" class="btn btn-warning text-white">+ Add New Employee</a>
+        <a href="/Employee/AddEmployee" class="btn btn-add text-white">+ Add New Employee</a>
     </div>
 
+    <!-- 🔍 SEARCH + FILTER -->
+    <form method="get" asp-action="Index" class="row g-3 mb-3">
+
+        <!-- Search -->
+        <div class="col-md-4">
+            <input type="text"
+                   name="search"
+                   value="@Context.Request.Query["search"]"
+                   class="form-control"
+                   placeholder="Search by name..." />
+        </div>
+
+        <!-- Department -->
+        <div class="col-md-3">
+            <select name="departmentId" class="form-select" asp-items="ViewBag.Departments">
+                <option value="">All Departments</option>
+            </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="true" selected="@(Context.Request.Query["status"] == "true")">Active</option>
+                <option value="false" selected="@(Context.Request.Query["status"] == "false")">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="col-md-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+            <a asp-action="Index" class="btn btn-secondary w-100">Reset</a>
+        </div>
+
+    </form>
+
+    <!-- TABLE -->
     <div class="card shadow-sm">
         <div class="card-body">
 
@@ -23,7 +69,6 @@
                     <tr>
                         <th>NAME</th>
                         <th>DEPARTMENT</th>
-                        @*<th>EXPERIENCE</th>*@
                         <th>SALARY</th>
                         <th>STATUS</th>
                         <th>ACTION</th>
@@ -31,12 +76,14 @@
                 </thead>
 
                 <tbody>
-                   @foreach (var item in Model)
+                    @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.FirstName</td>
-                            <td>@item.DepartmentId</td>
-                            @*<td>@item.Experience</td>*@
+                            <td>@item.FirstName @item.LastName</td>
+
+                            <!-- ⚠️ Improve later: show DepartmentName instead -->
+                            <td>@item.DepartmentName</td>
+
                             <td>₹@item.Salary</td>
 
                             <td>
@@ -48,19 +95,19 @@
                                 {
                                     <span class="badge bg-warning text-dark">Inactive</span>
                                 }
-
                             </td>
 
                             <td>
                                 <a href="/Employee/EditEmployee/@item.EmployeeId" class="text-primary me-2">Edit</a>
+
                                 <form asp-action="DeleteEmployee" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="@item.EmployeeId" />
-                                    <button type="submit" class="text-danger border-0 bg-transparent"
+                                    <button type="submit"
+                                            class="text-danger border-0 bg-transparent"
                                             onclick="return confirm('Are you sure you want to delete this employee?');">
                                         Delete
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                     }

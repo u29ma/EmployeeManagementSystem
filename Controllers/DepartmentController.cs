@@ -21,16 +21,56 @@ namespace EmployeeManagementSystem.Controllers
             return View(data);
         }
 
-        public IActionResult Create()
+        // ➕ Add (GET)
+        public IActionResult AddDepartment()
         {
             return View();
         }
 
+        // ➕ Add (POST)
         [HttpPost]
-        public IActionResult Create(DepartmentModel dept)
+        public IActionResult AddDepartment(DepartmentModel dept)
         {
-            _departmentDa.AddDepartment(dept);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _departmentDa.AddDepartment(dept);
+                return RedirectToAction("Index");
+            }
+            return View(dept);
+        }
+        // ✏️ Edit (GET)
+        public IActionResult EditDepartment(int id)
+        {
+            var dept = _departmentDa.GetDepartmentById(id);
+            if (dept == null) return NotFound();
+
+            return View(dept);
+        }
+        // ✏️ Edit (POST)
+        [HttpPost]
+        public IActionResult EditDepartment(DepartmentModel dept)
+        {
+            if (ModelState.IsValid)
+            {
+                _departmentDa.UpdateDepartment(dept);
+                return RedirectToAction("DepartmentList");
+            }
+            return View(dept);
+        }
+        // ❌ Delete
+        [HttpPost]
+        public IActionResult DeleteDepartment(int id)
+        {
+            try
+            {
+                _departmentDa.DeleteDepartment(id);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            return RedirectToAction("DepartmentList");
         }
     }
 }

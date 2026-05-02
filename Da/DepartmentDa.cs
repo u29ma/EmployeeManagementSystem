@@ -19,29 +19,40 @@ namespace EmployeeManagementSystem.Da
             return _context.Departments.ToList();
         }
 
-        // Insert
-        public void AddDepartment(DepartmentModel emp)
-        {
-            _context.Departments.Add(emp);
-            _context.SaveChanges();
-        }
+        //// Get by Id
+        //public DepartmentModel GetDepartmentById(int id)
+        //{
+        //    return _context.Departments.Find(id);
+        //}
 
-        // Get by Id
+        // Get by ID
         public DepartmentModel GetDepartmentById(int id)
         {
-            return _context.Departments.Find(id);
-        }
-        // Update
-        public void UpdateDepartment(DepartmentModel dep)
-        {
-            _context.Departments.Update(dep);
-            _context.SaveChanges();
+            return _context.Departments.FirstOrDefault(d => d.DepartmentId == id);
         }
 
-        // Delete
+        // Add
+        public void AddDepartment(DepartmentModel dept)
+        {
+            _context.Departments.Add(dept);
+            _context.SaveChanges();
+        }
+        // Update
+        public void UpdateDepartment(DepartmentModel dept)
+        {
+            _context.Departments.Update(dept);
+            _context.SaveChanges();
+        }
+        // Delete (SAFE)
         public void DeleteDepartment(int id)
         {
+            bool isUsed = _context.Employees.Any(e => e.DepartmentId == id);
+
+            if (isUsed)
+                throw new Exception("Department is assigned to employees!");
+
             var dept = _context.Departments.Find(id);
+
             if (dept != null)
             {
                 _context.Departments.Remove(dept);

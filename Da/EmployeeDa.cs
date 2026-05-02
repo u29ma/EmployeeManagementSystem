@@ -18,9 +18,22 @@ namespace EmployeeManagementSystem.Da
         // Get All
         public List<EmployeeModel> GetAllEmployees()
         {
-            return _context.Employees
-        .Where(e => e.Status)
-        .ToList(); //return _context.Employees.ToList();
+            var data = (from e in _context.Employees
+                        join d in _context.Departments
+                        on e.DepartmentId equals d.DepartmentId
+                        select new EmployeeModel
+                        {
+                            EmployeeId = e.EmployeeId,
+                            FirstName = e.FirstName,
+                            LastName = e.LastName,
+                            Salary = e.Salary,
+                            Status = e.Status,
+                            DepartmentId = e.DepartmentId,
+                            DepartmentName = d.DepartmentName 
+                        }).ToList();
+
+            return data;
+            //return _context.Employees.Where(e => e.Status).ToList(); //return _context.Employees.ToList();
 
         }
 
@@ -104,15 +117,11 @@ namespace EmployeeManagementSystem.Da
                 emp.DepartmentId = model.DepartmentId;
                 emp.Designation = model.Designation;
                 emp.Salary = model.Salary;
-
-                // Optional (if you added this column)
                 emp.IsProfileComplete = true;
 
                 _context.SaveChanges();
             }
         }
-
-
 
         // Delete      
         public void DeleteEmployee(int id)
@@ -121,7 +130,7 @@ namespace EmployeeManagementSystem.Da
             if (emp != null)
             {
                 emp.Status = false;  // 👈 mark as deleted
-                _context.Employees.Update(emp); // optional but safe
+                _context.Employees.Update(emp);
                 _context.SaveChanges();
             }
         }
@@ -129,8 +138,24 @@ namespace EmployeeManagementSystem.Da
         // ✅ GET EMPLOYEE BY ID
         public EmployeeModel GetEmployeeByID(int empId)
         {
-            return _context.Employees
-                .FirstOrDefault(e => e.EmployeeId == empId);
+            var data = (from e in _context.Employees
+                        join d in _context.Departments
+                        on e.DepartmentId equals d.DepartmentId
+                        where e.EmployeeId == empId
+                        select new EmployeeModel
+                        {
+                            EmployeeId = e.EmployeeId,
+                            FirstName = e.FirstName,
+                            LastName = e.LastName,
+                            DepartmentId = e.DepartmentId,
+                            DepartmentName = d.DepartmentName,
+                            IsProfileComplete = e.IsProfileComplete,
+                            Salary = e.Salary,
+                            Status = e.Status
+                        }).FirstOrDefault();
+
+            return data;
+            //return _context.Employees.FirstOrDefault(e => e.EmployeeId == empId);
         }
 
         public List<DepartmentModel> GetDepartments()

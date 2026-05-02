@@ -2,76 +2,92 @@
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 @model EmployeeManagementSystem.Models.EmployeeModel
+<div class="container mt-3">
 
-<form asp-action="EditEmployee" method="post">
-    
-    <input type="hidden" asp-for="EmployeeId" />
-    <input type="hidden" asp-for="UserId" /> 
-   @*  <input type="hidden" asp-for="Phone" />
-    <input type="hidden" asp-for="Address" />
-    <input type="hidden" asp-for="Designation" />
- *@
-    <div class="form-group">
-        <label>First Name</label>
-        <input asp-for="FirstName" class="form-control" />
-    </div>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Edit Employee Details</h4>
+        </div>
 
-    <div class="form-group">
-        <label>Last Name</label>
-        <input asp-for="LastName" class="form-control" />
-    </div>
+        <div class="card-body">
+            <form asp-action="EditEmployee" method="post">
+                <input type="hidden" asp-for="EmployeeId"/>
+                <input type="hidden" asp-for="UserId"/>
 
-    <!-- ✅ FIX -->
-    <div class="form-group">
-        <label>Department</label>
-        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments">
-            <option value="">-- Select Department --</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Gender</label>
-        <input asp-for="Gender" class="form-control" />
-    </div>
+                <div class="row">
+                    <!-- First Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>DOB</label>
-        <input asp-for="DOB" type="date" class="form-control" />
-    </div>
+                    <!-- Last Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>Phone</label>
-        <input asp-for="Phone" class="form-control" />
-    </div>
+                    <!-- Department -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DepartmentId"></label>
+                        <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments">
+                            <option value="">-- Select Department --</option>
+                        </select>
+                    </div>
+                    <!-- Gender -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Gender"></label>
+                        <input asp-for="Gender" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>Address</label>
-        <input asp-for="Address" class="form-control" />
-    </div>
+                    <!-- DOB -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DOB"></label>
+                        <input asp-for="DOB" type="date" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>Designation</label>
-        <input asp-for="Designation" class="form-control" />
-    </div>
+                    <!-- Phone -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Phone"></label>
+                        <input asp-for="Phone" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>Joining Date</label>
-        <input asp-for="JoiningDate" type="date" class="form-control" />
-    </div>
+                    <!-- Address -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Address"></label>
+                        <input asp-for="Address" class="form-control" />
+                    </div>
+                    <!-- Designation -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Designation"></label>
+                        <input asp-for="Designation" class="form-control" />
+                    </div>
 
+                    <!-- Joining Date -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="JoiningDate"></label>
+                        <input asp-for="JoiningDate" type="date" class="form-control" />
+                    </div>
 
-    <div class="form-group">
-        <label>Salary</label>
-        <input asp-for="Salary" class="form-control" />
-    </div>
+                    <!-- Salary -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Salary"></label>
+                        <input asp-for="Salary" class="form-control" />
+                    </div>
+                    <!-- Status -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Status"></label>
+                        <select asp-for="Status" class="form-control">
+                            <option value="">-- Select Status --</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
 
-    <div class="form-group">
-        <label>Status</label>
-        <select asp-for="Status" class="form-control">
-            <option>Active</option>
-            <option>Inactive</option>
-        </select>
-    </div>
-
-    <br />
-    <button type="submit" class="btn btn-success">Update</button>
-</form>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-success">Update</button>
+            </form>
+          </div>
+     </div>
+</div>

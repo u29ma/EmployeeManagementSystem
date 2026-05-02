@@ -21,11 +21,33 @@ namespace EmployeeManagementSystem.Da
         }
 
         // ✅ GET EMPLOYEE BY USERID
+        //public EmployeeModel GetEmployeeByUserId(int userId)
+        //{
+        //    return _context.Employees
+        //        .FirstOrDefault(e => e.UserId == userId);
+        //}
         public EmployeeModel GetEmployeeByUserId(int userId)
         {
-            return _context.Employees
-                .FirstOrDefault(e => e.UserId == userId);
+            var data = (from e in _context.Employees
+                        join d in _context.Departments
+                        on e.DepartmentId equals d.DepartmentId
+                        where e.UserId == userId
+                        select new EmployeeModel
+                        {
+                            EmployeeId = e.EmployeeId,
+                            UserId = e.UserId,
+                            FirstName = e.FirstName,
+                            LastName = e.LastName,
+                            DepartmentId = e.DepartmentId,
+                            DepartmentName = d.DepartmentName, 
+                            Salary = e.Salary,
+                            IsProfileComplete = e.IsProfileComplete,
+                            Status = e.Status
+                        }).FirstOrDefault();
+
+            return data;
         }
+
 
         // ✅ REGISTER (User + Employee)
         public bool Register(RegisterModel model)
