@@ -1,46 +1,96 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout1.cshtml";
-   
 }
 @model EmployeeManagementSystem.Models.PayrollModel
 
-<h2>Create Payroll</h2>
+<div class="container mt-4">
 
-<form asp-action="CreatePayroll" method="post">
+    <div class="card shadow-sm p-4">
+        <h3 class="mb-4 text-center">Create Payroll</h3>
 
-    <div>
-        <label>Employee Id</label>
-        <input asp-for="EmployeeId" class="form-control" />
+        <form asp-action="CreatePayroll" method="post">
+
+            <div class="row">
+
+                <!-- 👤 Employee -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Employee</label>
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeList">
+                        <option value="">-- Select Employee --</option>
+                    </select>
+                </div>
+
+                <!-- 📅 Month -->
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Month</label>
+                    <select asp-for="SalaryMonth" class="form-control">
+                        <option value="">Select Month</option>
+                        @foreach (var m in System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames)
+                        {
+                            if (!string.IsNullOrEmpty(m))
+                            {
+                                <option value="@m">@m</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <!-- 📆 Year -->
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Year</label>
+                    <input asp-for="SalaryYear" class="form-control" placeholder="2026" />
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <!-- 💰 Basic Salary -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Basic Salary</label>
+                    <input asp-for="BasicSalary" class="form-control" id="BasicSalary" />
+                </div>
+
+                <!-- 🎁 Bonus -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Bonus</label>
+                    <input asp-for="Bonus" class="form-control" id="Bonus" />
+                </div>
+
+                <!-- ➖ Deductions -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Deductions</label>
+                    <input asp-for="Deductions" class="form-control" id="Deductions" />
+                </div>
+
+            </div>
+
+            <!-- 💵 Net Salary -->
+            <div class="mb-3">
+                <label class="form-label">Net Salary</label>
+                <input asp-for="NetSalary" class="form-control fw-bold text-success" id="NetSalary" readonly />
+            </div>
+
+            <!-- 🔘 Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/Payroll/Index" class="btn btn-secondary">← Back</a>
+                <button type="submit" class="btn btn-primary px-4">Save Payroll</button>
+            </div>
+
+        </form>
     </div>
 
-    <div>
-        <label>Basic Salary</label>
-        <input asp-for="BasicSalary" class="form-control" />
-    </div>
+</div>
+<script>
+    function calculateSalary() {
+        let basic = parseFloat(document.getElementById("BasicSalary").value) || 0;
+        let bonus = parseFloat(document.getElementById("Bonus").value) || 0;
+        let deduction = parseFloat(document.getElementById("Deductions").value) || 0;
 
-    <div>
-        <label>Bonus</label>
-        <input asp-for="Bonus" class="form-control" />
-    </div>
+        document.getElementById("NetSalary").value = (basic + bonus - deduction).toFixed(2);
+    }
 
-    <div>
-        <label>Deductions</label>
-        <input asp-for="Deductions" class="form-control" />
-    </div>
-
-    <div>
-        <label>Month</label>
-        <input asp-for="SalaryMonth" class="form-control" />
-    </div>
-
-    <div>
-        <label>Year</label>
-        <input asp-for="SalaryYear" class="form-control" />
-    </div>
-
-    <button type="submit" class="btn btn-primary mt-2">Save</button>
-
-</form>
+    document.getElementById("BasicSalary").addEventListener("input", calculateSalary);
+    document.getElementById("Bonus").addEventListener("input", calculateSalary);
+    document.getElementById("Deductions").addEventListener("input", calculateSalary);
+</script>

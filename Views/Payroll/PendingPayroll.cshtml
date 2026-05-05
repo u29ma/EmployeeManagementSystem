@@ -19,8 +19,18 @@
     {
         <tr>
             <td>@item.Employee.FirstName @item.Employee.LastName</td>
-            <td>@item.NetSalary</td>
-            <td><span class="badge bg-warning">Pending</span></td>
+            <td>₹ @item.NetSalary</td>
+            <td>
+                <span class="badge @(item.Status == "Approved" ? "bg-success" : "bg-warning")">
+                    @item.Status
+                </span>
+            </td>
+            <td>
+                @if (item.Status != "Approved")
+                {
+                    <a href="/Payroll/Approve/@item.PayrollId" class="btn btn-success">Approve</a>
+                }
+            </td>
         </tr>
     }
 </table>

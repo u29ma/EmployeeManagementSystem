@@ -15,73 +15,22 @@ namespace EmployeeManagementSystem.Controllers
         {
             _employeeDa = emplDa;
         }
-        
-        //public IActionResult Index()
-        //{
-        //    if (HttpContext.Session.GetString("Role") != "Admin")
-        //        return RedirectToAction("AccessDenied", "Home");
 
-        //    var data = _employeeDa.GetAllEmployees();
-        //    return View(data);
-        //}
         public IActionResult Index(string search, int? departmentId, bool? status)
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("AccessDenied", "Home");
 
-            var employees = _employeeDa.GetAllEmployees();
+            var employees = _employeeDa.GetAllEmployees(search, departmentId, status);
 
-            // 🔍 Search by name
-            //if (!string.IsNullOrEmpty(search))
-            //{
-            //    employees = employees
-            //        .Where(e => e.FirstName.Contains(search) && e.LastName.Contains(search))
-            //        .ToList();
-            //}
-            //if (!string.IsNullOrEmpty(search))
-            //{
-            //    employees = employees
-            //        .Where(e => (e.FirstName + " " + e.LastName)
-            //        .ToLower()
-            //        .Contains(search.ToLower()))
-            //        .ToList();
-            //}
-            if (!string.IsNullOrEmpty(search))
-            {
-                search = search.Trim().ToLower();
-
-                employees = employees
-                    .Where(e =>
-                        (e.FirstName + " " + e.LastName).ToLower().Contains(search) ||
-                        e.FirstName.ToLower().Contains(search) ||
-                        e.LastName.ToLower().Contains(search)
-                    )
-                    .ToList();
-            }
-
-
-            // 🏢 Filter by department
-            if (departmentId.HasValue && departmentId != 0)
-            {
-                employees = employees
-                    .Where(e => e.DepartmentId == departmentId)
-                    .ToList();
-            }
-
-            // 🔄 Filter by status
-            if (status.HasValue)
-            {
-                employees = employees
-                    .Where(e => e.Status == status.Value)
-                    .ToList();
-            }
-
-            // Dropdown data
-            ViewBag.Departments = new SelectList(_employeeDa.GetDepartments(), "DepartmentId", "DepartmentName");
+            ViewBag.Departments = new SelectList(
+                _employeeDa.GetDepartments(),
+                "DepartmentId",
+                "DepartmentName"
+            );
 
             return View(employees);
         }
-
         // 🔹 GET: Add Employee Page
         public IActionResult AddEmployee()
         {
@@ -113,11 +62,11 @@ namespace EmployeeManagementSystem.Controllers
             return View(emp);
           
         }
-        public IActionResult EmployeeList()
-        {
-            var employees = _employeeDa.GetAllEmployees();  // ✅ Call Da
-            return View(employees);
-        }
+        //public IActionResult EmployeeList()
+        //{
+        //    var employees = _employeeDa.GetAllEmployees();  // ✅ Call Da
+        //    return View(employees);
+        //}
 
         // GET
         [HttpGet]

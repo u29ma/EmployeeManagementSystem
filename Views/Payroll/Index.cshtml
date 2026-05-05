@@ -1,41 +1,142 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout1.cshtml";
-   
 }
 @model List<EmployeeManagementSystem.Models.PayrollModel>
 
-<h2>All Payroll</h2>
+<div class="container mt-4">
 
-<a href="/Payroll/CreatePayroll" class="btn btn-primary">Create Payroll</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Manage Payroll</h3>
+        <a href="/Payroll/CreatePayroll" class="btn btn-primary">
+            + Create Payroll
+        </a>
+    </div>
 
-<table class="table mt-3">
-    <tr>
-        <th>Employee</th>
-        <th>Month</th>
-        <th>Year</th>
-        <th>Net Salary</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
+    <div class="card shadow-sm p-3">
+        <form method="get" class="row mb-3">
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Employee.EmployeeId</td>
-            <td>@item.SalaryMonth</td>
-            <td>@item.SalaryYear</td>
-            <td>@item.NetSalary</td>
-            <td>@item.Status</td>
-            <td>
-                @if (item.Status != "Approved")
+            <!-- 🔍 Search -->
+            <div class="col-md-3">
+                <input type="text" name="search"
+                       value="@ViewBag.Search"
+                       class="form-control"
+                       placeholder="Search employee..." />
+            </div>
+
+            <!-- 📅 Month -->
+            <div class="col-md-2">
+                <select name="month" class="form-control">
+                    <option value="">All Months</option>
+
+                    @{
+                        var months = System.Globalization.CultureInfo
+                            .CurrentCulture
+                            .DateTimeFormat
+                            .MonthNames;
+                    }
+
+                    @foreach (var m in months)
+                    {
+                        if (!string.IsNullOrEmpty(m)) // remove empty 13th value
+                        {
+                            <option value="@m" selected="@(ViewBag.Month == m)">
+                                @m
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+            <!-- 🔄 Status -->
+            <div class="col-md-2">
+                <select name="status" class="form-control">
+                    <option value="">All Status</option>
+                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
+                    <option value="Pending" selected="@(ViewBag.Status == "Pending")">Pending</option>
+                </select>
+            </div>
+
+            <!-- 🔘 Button -->
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Filter</button>
+            </div>
+
+        </form>
+
+        <table class="table table-hover align-middle text-center">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Employee</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Net Salary</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <a href="/Payroll/Approve/@item.PayrollId" class="btn btn-success">Approve</a>
-                }
-            </td>
-        </tr>
-    }
-</table>
+                    <tr>
+                        <!-- 👤 Show Name instead of ID -->
+                        <td>
+                            @(item.Employee?.FirstName + " " + item.Employee?.LastName)
+                        </td>
 
+                        <td>@item.SalaryMonth</td>
+                        <td>@item.SalaryYear</td>
+
+                        <!-- 💰 Salary -->
+                        <td class="fw-bold text-success">
+                            ₹ @item.NetSalary
+                        </td>
+
+                        <!-- 🟢 Status -->
+                        <td>
+                            <span class="badge px-3 py-2 @(item.Status == "Approved" ? "bg-success" : "bg-warning text-dark")">
+                                @item.Status
+                            </span>
+                        </td>
+
+                        <!-- ⚙ Action -->
+                        <td>
+                            @if (item.Status != "Approved")
+                            {
+                                <a href="/Payroll/Approve/@item.PayrollId"
+                                       class="btn btn-sm btn-success">
+                                    ✔ Approve
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Done</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-3">
+
+    <nav>
+        <ul class="pagination">
+
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                           href="?page=@i&search=@ViewBag.Search&status=@ViewBag.Status&month=@ViewBag.Month">
+                        @i
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+
+</div>

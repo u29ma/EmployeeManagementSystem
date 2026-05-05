@@ -59,9 +59,15 @@ namespace EmployeeManagementSystem.Controllers
 
         // ================= ADMIN =================
 
-        public IActionResult AllAttendance()
+        public IActionResult AllAttendance(string search, DateTime? date, string status)
         {
-            var data = _attendanceDa.GetAllAttendance();
+            var data = _attendanceDa.GetAllAttendance(search, date, status);
+
+            // 🔁 keep values in UI
+            ViewBag.Search = search;
+            ViewBag.Date = date?.ToString("yyyy-MM-dd");
+            ViewBag.Status = status;
+
             return View(data);
         }
     }

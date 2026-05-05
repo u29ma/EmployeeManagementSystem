@@ -60,10 +60,38 @@ namespace EmployeeManagementSystem.Da
         }
 
         // 👉 Admin view all
-        public List<AttendanceModel> GetAllAttendance()
+        public List<AttendanceModel> GetAllAttendance(string search, DateTime? date, string status)
         {
-            return _context.Attendance
+            var query = _context.Attendance
                 .Include(a => a.Employee)
+                .AsQueryable();
+
+            // 🔍 Search (Employee Name)
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                query = query.Where(a =>
+                    (a.Employee.FirstName + " " + a.Employee.LastName).Contains(search) ||
+                    a.Employee.FirstName.Contains(search) ||
+                    a.Employee.LastName.Contains(search)
+                );
+            }
+
+            // 📅 Date filter
+            if (date.HasValue)
+            {
+                query = query.Where(a => a.Date.Date == date.Value.Date);
+            }
+
+            // 🔄 Status filter
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                query = query.Where(a => a.Status == status);
+            }
+
+            return query
+                .OrderByDescending(a => a.Date)
                 .ToList();
         }
 

@@ -1,30 +1,97 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout1.cshtml";
-    
 }
 @model List<EmployeeManagementSystem.Models.PayrollModel>
 
-<h2>My Salary</h2>
+<div class="container mt-4">
 
-<table class="table">
-    <tr>
-        <th>Month</th>
-        <th>Year</th>
-        <th>Salary</th>
-        <th>Status</th>
-    </tr>
+    <h3 class="mb-3">My Salary</h3>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.SalaryMonth</td>
-            <td>@item.SalaryYear</td>
-            <td>@item.NetSalary</td>
-            <td>@item.Status</td>
-        </tr>
-    }
-</table>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="card p-3 text-center">
+                <h6>Total Paid</h6>
+                <h4>₹ @Model.Where(x => x.Status == "Approved").Sum(x => x.NetSalary)</h4>
+            </div>
+        </div>
+    </div>
 
+    <div class="card shadow-sm p-3">
+        <form method="get" class="row mb-3">
+
+            <div class="col-md-3">
+                <select name="month" class="form-control">
+                    <option value="">All Months</option>
+                    <option value="January" selected="@(ViewBag.Month == "January")">January</option>
+                    <option value="February" selected="@(ViewBag.Month == "February")">February</option>
+                    <option value="March" selected="@(ViewBag.Month == "March")">March</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+                    <option value="">All</option>
+                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
+                    <option value="Pending" selected="@(ViewBag.Status == "Pending")">Pending</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Filter</button>
+            </div>
+
+        </form>
+
+        <table class="table table-hover text-center align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Net Salary</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <!-- 📅 Month -->
+                            <td>@item.SalaryMonth</td>
+
+                            <!-- 📆 Year -->
+                            <td>@item.SalaryYear</td>
+
+                            <!-- 💰 Salary -->
+                            <td class="fw-bold text-success">
+                                ₹ @item.NetSalary
+                            </td>
+
+                            <!-- 🟢 Status -->
+                            <td>
+                                <span class="badge px-3 py-2 @(item.Status == "Approved" 
+                                    ? "bg-success"
+                                    : "bg-warning text-dark")">
+                                    @item.Status
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-muted py-4">
+                            No salary records found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

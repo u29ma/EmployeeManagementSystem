@@ -1,6 +1,7 @@
 ﻿
 using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,9 +17,9 @@ namespace EmployeeManagementSystem.Da
         }
 
         // Get All
-        public List<EmployeeModel> GetAllEmployees()
+        public List<EmployeeModel> GetAllEmployees(string search, int? departmentId, bool? status)
         {
-            var data = (from e in _context.Employees
+            var query = from e in _context.Employees
                         join d in _context.Departments
                         on e.DepartmentId equals d.DepartmentId
                         select new EmployeeModel
@@ -29,14 +30,38 @@ namespace EmployeeManagementSystem.Da
                             Salary = e.Salary,
                             Status = e.Status,
                             DepartmentId = e.DepartmentId,
-                            DepartmentName = d.DepartmentName 
-                        }).ToList();
+                            DepartmentName = d.DepartmentName
+                        };
 
-            return data;
-            //return _context.Employees.Where(e => e.Status).ToList(); //return _context.Employees.ToList();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
 
+                query = query.Where(e =>
+                    EF.Functions.Like(e.FirstName, "%" + search + "%") ||
+                    EF.Functions.Like(e.LastName, "%" + search + "%") ||
+                    (
+                        EF.Functions.Like(e.FirstName, "%" + search.Split(' ')[0] + "%") &&
+                        search.Contains(" ") &&
+                        EF.Functions.Like(e.LastName, "%" + search.Split(' ').Last() + "%")
+                    )
+                );
+            }
+
+            // 🏢 Department Filter
+            if (departmentId.HasValue && departmentId != 0)
+            {
+                query = query.Where(e => e.DepartmentId == departmentId);
+            }
+
+            // 🔄 Status Filter
+            if (status.HasValue)
+            {
+                query = query.Where(e => e.Status == status.Value);
+            }
+
+            return query.ToList(); // ✅ execute here
         }
-
         // Insert
         public void AddEmployee(EmployeeModel emp, string email, string password)
         {
@@ -163,6 +188,22 @@ namespace EmployeeManagementSystem.Da
             return _context.Departments.ToList();
         }
 
+        public List<EmployeeModel> GetAllEmployees()
+        {
+            return (from e in _context.Employees
+                    join d in _context.Departments
+                    on e.DepartmentId equals d.DepartmentId
+                    where e.Status == true   // ✅ only active employees
+                    select new EmployeeModel
+                    {
+                        EmployeeId = e.EmployeeId,
+                        FirstName = e.FirstName,
+                        LastName = e.LastName,
+                        DepartmentId = e.DepartmentId,
+                        DepartmentName = d.DepartmentName,
+                        Salary = e.Salary
+                    }).ToList();
+        }
     }
 }
 

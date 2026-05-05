@@ -1,34 +1,120 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
-
 @model List<EmployeeManagementSystem.Models.AttendanceModel>
 
-<h2>All Attendance</h2>
+<div class="container mt-4">
 
-<table class="table">
-    <tr>
-        <th>Employee</th>
-        <th>Date</th>
-        <th>Check In</th>
-        <th>Check Out</th>
-        <th>Status</th>
-    </tr>
+    <!-- 🔹 Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>All Attendance</h3>
+    </div>
 
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Employee.EmployeeId</td>
-            <td>@item.Date.ToShortDateString()</td>
-            <td>@item.CheckIn?.ToString(@"hh\:mm")</td>
-            <td>@item.CheckOut?.ToString(@"hh\:mm")</td>
-            @* <td>@item.CheckIn</td>
-            <td>@item.CheckOut</td> *@
-            <td>@item.Status</td>
-        </tr>
-    }
-</table>
+    <!-- 🔹 Card -->
+    <div class="card shadow-sm p-3">
 
+        <form method="get" class="row mb-3">
+
+            <!-- 🔍 Search -->
+            <div class="col-md-3">
+                <input type="text" name="search"
+                       value="@ViewBag.Search"
+                       class="form-control"
+                       placeholder="Search employee..." />
+            </div>
+
+            <!-- 📅 Date -->
+            <div class="col-md-3">
+                <input type="date" name="date"
+                       value="@ViewBag.Date"
+                       class="form-control" />
+            </div>
+
+            <!-- 🔄 Status -->
+            <div class="col-md-2">
+                <select name="status" class="form-control">
+                    <option value="">All Status</option>
+                    <option value="Present" selected="@(ViewBag.Status == "Present")">Present</option>
+                    <option value="Absent" selected="@(ViewBag.Status == "Absent")">Absent</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 d-flex gap-2">
+               
+                <button type="submit" class="btn btn-primary w-100 align-items-center justify-content-center" style="height:40px;">
+                    🔍 Filter
+                </button>
+
+                <a href="/Attendance/AllAttendance" style="height:40px;" class="btn btn-secondary align-items-center justify-content-center">
+                    Reset
+                </a>
+                
+            </div>
+
+        </form>
+
+        <table class="table table-hover align-middle text-center">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>S No</th>
+                    <th>Employee</th>
+                    <th>Date</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int count = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <!-- 🔢 Serial -->
+                            <td>@count</td>
+
+                            <!-- 👤 Employee Name -->
+                            <td>
+                                @(item.Employee != null
+                                    ? item.Employee.FirstName + " " + item.Employee.LastName
+                                    : "N/A")
+                            </td>
+
+                            <!-- 📅 Date -->
+                            <td>@item.Date.ToString("dd MMM yyyy")</td>
+
+                            <!-- ⏰ Check In -->
+                            <td>@item.CheckIn?.ToString(@"hh\:mm")</td>
+
+                            <!-- ⏰ Check Out -->
+                            <td>@item.CheckOut?.ToString(@"hh\:mm")</td>
+
+                            <!-- 🟢 Status -->
+                            <td>
+                                <span class="badge px-3 py-2
+                                    @(item.Status == "Present" ? "bg-success" : item.Status == "Absent" ? "bg-danger" :"bg-warning text-dark")">
+                                    @item.Status
+                                </span>
+                            </td>
+                        </tr>
+
+                        count++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-muted py-4">
+                            No attendance records found
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

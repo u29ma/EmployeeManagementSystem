@@ -21,17 +21,21 @@ namespace EmployeeManagementSystem.Da
                 .ToList();
         }
 
-
+        public IQueryable<PayrollModel> GetAllPayrollQueryable()
+        {
+            return _context.Payroll
+                .Include(p => p.Employee);
+        }
         // 👉 Get all payroll (Admin)
         public List<PayrollModel> GetAllPayroll()
-            {
-                return _context.Payroll
-                    .Include(p => p.Employee)
-                    .ToList();
-            }
+        {
+            return _context.Payroll
+                .Include(p => p.Employee)
+                .ToList();
+        }
         // 👉 Insert payroll
-         public void AddPayroll(PayrollModel payroll)
-          {
+        public void AddPayroll(PayrollModel payroll)
+        {
             var exists = _context.Payroll.Any(p =>
             p.EmployeeId == payroll.EmployeeId &&
             p.SalaryMonth == payroll.SalaryMonth &&
@@ -39,29 +43,44 @@ namespace EmployeeManagementSystem.Da
 
             payroll.PaymentDate = DateTime.Now;
 
-                _context.Payroll.Add(payroll);
+            _context.Payroll.Add(payroll);
+            _context.SaveChanges();
+        }
+
+        // 👉 Approve payroll
+        public void ApprovePayroll(int id)
+        {
+            var data = _context.Payroll.Find(id);
+            if (data != null)
+            {
+                data.Status = "Approved";
                 _context.SaveChanges();
             }
+        }
 
-            // 👉 Approve payroll
-            public void ApprovePayroll(int id)
+        // 👉 Get employee payroll
+        public List<PayrollModel> GetPayrollByEmployee(int empId, string month, string status)
+        {
+            var query = _context.Payroll
+                .Where(p => p.EmployeeId == empId);
+
+            // 📅 Month filter (ONLY if selected)
+            if (!string.IsNullOrWhiteSpace(month))
             {
-                var data = _context.Payroll.Find(id);
-                if (data != null)
-                {
-                    data.Status = "Approved";
-                    _context.SaveChanges();
-                }
+                query = query.Where(p => p.SalaryMonth == month);
             }
 
-            // 👉 Get employee payroll
-            public List<PayrollModel> GetPayrollByEmployee(int empId)
+            // 🔄 Status filter (ONLY if selected)
+            if (!string.IsNullOrWhiteSpace(status))
             {
-                return _context.Payroll
-                    .Where(p => p.EmployeeId == empId)
-                    .ToList();
+                query = query.Where(p => p.Status == status);
             }
+
+            return query
+                .OrderByDescending(p => p.PayrollId)
+                .ToList();
         }
     }
+}
 
 
