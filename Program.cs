@@ -1,6 +1,7 @@
 using EmployeeManagementSystem.Da;
 using EmployeeManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<DepartmentDa>();
 builder.Services.AddScoped<EmployeeDa>();
 builder.Services.AddScoped<LeaveManagementDa>();
 builder.Services.AddScoped<PayrollDa>();
+builder.Services.AddScoped<ReportsDa>();
 
 builder.Services.AddDistributedMemoryCache(); // required
 builder.Services.AddSession(options =>
@@ -30,6 +32,8 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+//RotativaConfiguration.Setup(app.Environment.WebRootPath, "Rotativa");
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -38,11 +42,22 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseSession();
 
+//builder.Services.AddAuthentication("CookieAuth")
+//    .AddCookie("CookieAuth", options =>
+//    {
+//        options.LoginPath = "/Account/Login";
+//        options.AccessDeniedPath = "/Account/AccessDenied";
+//    });
+
+//builder.Services.AddAuthorization();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

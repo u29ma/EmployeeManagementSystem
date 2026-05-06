@@ -9,10 +9,10 @@ namespace EmployeeManagementSystem.Da
     {
         private readonly ApplicationDbContext _context;
 
-            public LeaveManagementDa(ApplicationDbContext context)
-            {
-                _context = context;
-            }
+        public LeaveManagementDa(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         // ================= Admin Dashboard Details=================
 
         // ✅ On Leave Today
@@ -58,31 +58,58 @@ namespace EmployeeManagementSystem.Da
 
         // ================= APPLY LEAVE =================
         public void ApplyLeave(LeaveManagementModel leave)
-            {
-                leave.Status = "Pending";
-                leave.AppliedDate = DateTime.Now;
+        {
+            leave.Status = "Pending";
+            leave.AppliedDate = DateTime.Now;
 
-                _context.Leaves.Add(leave);
-                _context.SaveChanges();
+            _context.Leaves.Add(leave);
+            _context.SaveChanges();
+        }
+
+        // ================= GET ALL LEAVES (ADMIN) =================
+        
+        public List<LeaveManagementModel> GetAllLeaves(string search, string status)
+        {
+            var query = _context.Leaves
+                .Include(l => l.Employee)
+                .Include(l => l.LeaveType)
+                .AsQueryable();
+
+            // 🔍 Search by employee name
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim();
+
+                query = query.Where(e =>
+                    EF.Functions.Like(e.Employee.FirstName, "%" + search + "%") ||
+                    EF.Functions.Like(e.Employee.LastName, "%" + search + "%") ||
+                    (
+                        EF.Functions.Like(e.Employee.FirstName, "%" + search.Split(' ')[0] + "%") &&
+                        search.Contains(" ") &&
+                        EF.Functions.Like(e.Employee.LastName, "%" + search.Split(' ').Last() + "%")
+                    )
+                );
             }
 
-            // ================= GET ALL LEAVES (ADMIN) =================
-            public List<LeaveManagementModel> GetAllLeaves()
+            // 📌 Filter by status
+            if (!string.IsNullOrWhiteSpace(status))
             {
-                return _context.Leaves
-                    .Include(l => l.LeaveType)   // ✅ Important
-                    .Include(l => l.Employee)    // optional
-                    .ToList();
+                query = query.Where(l => l.Status == status);
             }
 
-            // ================= GET EMPLOYEE LEAVES =================
-            public List<LeaveManagementModel> GetLeavesByEmployee(int empId)
-            {
-                return _context.Leaves
-                    .Where(l => l.EmployeeId == empId)
-                    .Include(l => l.LeaveType)   // ✅ Important
-                    .ToList();
-            }
+            return query
+                .OrderByDescending(l => l.LeaveId)
+                .ToList();
+        }
+
+        // ================= GET EMPLOYEE LEAVES =================
+        public List<LeaveManagementModel> GetLeavesByEmployee(int empId)
+        {
+            return _context.Leaves
+                .Where(l => l.EmployeeId == empId)
+                .Include(l => l.LeaveType)   // ✅ Important
+                .ToList();
+        }
         // 👉 Get leaves by EmployeeId
         public List<LeaveManagementModel> GetLeavesEmployeeId(int empId)
         {
@@ -94,35 +121,35 @@ namespace EmployeeManagementSystem.Da
 
         // ================= APPROVE LEAVE =================
         public void ApproveLeave(int id)
+        {
+            var leave = _context.Leaves.Find(id);
+
+            if (leave != null)
             {
-                var leave = _context.Leaves.Find(id);
-
-                if (leave != null)
-                {
-                    leave.Status = "Approved";
-                    _context.SaveChanges();
-                }
-            }
-
-            // ================= REJECT LEAVE =================
-            public void RejectLeave(int id)
-            {
-                var leave = _context.Leaves.Find(id);
-
-                if (leave != null)
-                {
-                    leave.Status = "Rejected";
-                    _context.SaveChanges();
-                }
-            }
-
-            // ================= GET LEAVE BY ID =================
-            public LeaveManagementModel GetLeaveById(int id)
-            {
-                return _context.Leaves
-                    .Include(l => l.LeaveType)
-                    .FirstOrDefault(l => l.LeaveId == id);
+                leave.Status = "Approved";
+                _context.SaveChanges();
             }
         }
+
+        // ================= REJECT LEAVE =================
+        public void RejectLeave(int id)
+        {
+            var leave = _context.Leaves.Find(id);
+
+            if (leave != null)
+            {
+                leave.Status = "Rejected";
+                _context.SaveChanges();
+            }
+        }
+
+        // ================= GET LEAVE BY ID =================
+        public LeaveManagementModel GetLeaveById(int id)
+        {
+            return _context.Leaves
+                .Include(l => l.LeaveType)
+                .FirstOrDefault(l => l.LeaveId == id);
+        }
     }
+}
 

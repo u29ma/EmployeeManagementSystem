@@ -24,8 +24,9 @@ public class PayrollModel
     public decimal NetSalary { get; private set; }
 
     public string SalaryMonth { get; set; }
-    public int SalaryYear { get; set; }
 
+    [Required]
+    public int? SalaryYear { get; set; }
     public DateTime? PaymentDate { get; set; }
 }
 

@@ -25,7 +25,6 @@ namespace EmployeeManagementSystem.Controllers
 
         // ================= ADMIN =================
 
-
         public IActionResult Index(string search, string status, string? month, int page = 1)
         {
             int pageSize = 5;
@@ -96,17 +95,29 @@ namespace EmployeeManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _payrollDa.AddPayroll(payroll);
-                return RedirectToAction("Index");
+                bool saved = _payrollDa.AddPayroll(payroll);
+
+                if (saved)
+                {
+                    TempData["Success"] = "Payroll created successfully!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Payroll already exists for this employee, month and year.");
+                }
             }
-            ViewBag.EmployeeList = new SelectList(_employeeDa.GetAllEmployees()
-            .Select(e => new
-            {
-                e.EmployeeId,
-                FullName = e.FirstName + " " + e.LastName + " (" + e.DepartmentName + ")"
-            }),
-            "EmployeeId",
-            "FullName"
+
+            // 🔥 Reload dropdown
+            ViewBag.EmployeeList = new SelectList(
+                _employeeDa.GetAllEmployees()
+                .Select(e => new
+                {
+                    e.EmployeeId,
+                    FullName = e.FirstName + " " + e.LastName + " (" + e.DepartmentName + ")"
+                }),
+                "EmployeeId",
+                "FullName"
             );
 
             return View(payroll);

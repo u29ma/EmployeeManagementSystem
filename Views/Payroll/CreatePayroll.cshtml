@@ -38,7 +38,15 @@
                 <!-- 📆 Year -->
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Year</label>
-                    <input asp-for="SalaryYear" class="form-control" placeholder="2026" />
+                    <input asp-for="SalaryYear"
+                           type="number"
+                           min="2020"
+                           max="2100"
+                           class="form-control"
+                           placeholder="2026" />
+
+                    <span asp-validation-for="SalaryYear"
+                          class="text-danger"></span>
                 </div>
 
             </div>

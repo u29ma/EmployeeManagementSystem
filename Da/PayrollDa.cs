@@ -34,17 +34,26 @@ namespace EmployeeManagementSystem.Da
                 .ToList();
         }
         // 👉 Insert payroll
-        public void AddPayroll(PayrollModel payroll)
+        public bool AddPayroll(PayrollModel payroll)
         {
             var exists = _context.Payroll.Any(p =>
-            p.EmployeeId == payroll.EmployeeId &&
-            p.SalaryMonth == payroll.SalaryMonth &&
-            p.SalaryYear == payroll.SalaryYear);
+                p.EmployeeId == payroll.EmployeeId &&
+                p.SalaryMonth == payroll.SalaryMonth &&
+                p.SalaryYear == payroll.SalaryYear);
+
+            // ❌ Already exists
+            if (exists)
+            {
+                return false;
+            }
 
             payroll.PaymentDate = DateTime.Now;
+            payroll.Status = "Pending";
 
             _context.Payroll.Add(payroll);
             _context.SaveChanges();
+
+            return true;
         }
 
         // 👉 Approve payroll

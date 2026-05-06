@@ -86,10 +86,16 @@ namespace EmployeeManagementSystem.Controllers
         // ================= ADMIN SIDE =================
 
         // 👉 View all leave requests
-        public IActionResult AllLeaves()
+       
+        public IActionResult AllLeaves(string search, string status)
         {
-            var leaves = _leaveDa.GetAllLeaves();
-            return View(leaves);
+            var data = _leaveDa.GetAllLeaves(search, status);
+
+            // 🔥 keep selected values after filter
+            ViewBag.Search = search;
+            ViewBag.Status = status;
+
+            return View(data);
         }
 
         // 👉 Approve Leave

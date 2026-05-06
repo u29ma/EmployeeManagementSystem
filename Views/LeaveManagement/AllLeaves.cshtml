@@ -9,15 +9,93 @@
 
 <div class="container mt-4">
     <div class="card shadow-lg p-4">
-        <h3 class="text-center text-primary mb-3">Leave Requests</h3>
+        <h3 class="mb-3">Leave Requests</h3>
+        <div class="row mb-4">
 
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body">
+                        <h6>Pending</h6>
+                        <h3>@Model.Count(x => x.Status == "Pending")</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h6>Approved</h6>
+                        <h3>@Model.Count(x => x.Status == "Approved")</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <h6>Rejected</h6>
+                        <h3>@Model.Count(x => x.Status == "Rejected")</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <form method="get" class="row mb-3">
+
+            <div class="col-md-3">
+                <input type="text"
+                       name="search"
+                       value="@ViewBag.Search"
+                       class="form-control"
+                       placeholder="Search employee..." />
+            </div>
+
+            <div class="col-md-3">
+                <select name="status" class="form-control">
+
+                    <option value="">All Status</option>
+
+                    <option value="Pending"
+                            selected="@(ViewBag.Status == "Pending")">
+                        Pending
+                    </option>
+
+                    <option value="Approved"
+                            selected="@(ViewBag.Status == "Approved")">
+                        Approved
+                    </option>
+
+                    <option value="Rejected"
+                            selected="@(ViewBag.Status == "Rejected")">
+                        Rejected
+                    </option>
+
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">
+                    Filter
+                </button>
+            </div>
+
+            <div class="col-md-2">
+                <a href="/LeaveManagement/AllLeaves"
+                       class="btn btn-secondary w-100">
+                    Reset
+                </a>
+            </div>
+
+        </form>
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
                     <th>Employee ID</th>
                     <th>Leave Type</th>
+                    <th>Applied On</th>
                     <th>From</th>
                     <th>To</th>
+                    <th>Duration</th>
                     <th>Reason</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -28,10 +106,14 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.EmployeeId</td>
+                        <td> @item.Employee.FirstName @item.Employee.LastName</td>
                         <td>@item.LeaveType.LeaveName</td>
+                        <td>@item.AppliedDate.ToShortDateString()</td>
                         <td>@item.StartDate.ToShortDateString()</td>
                         <td>@item.EndDate.ToShortDateString()</td>
+                        <td>
+                            @((item.EndDate - item.StartDate).Days + 1) Days
+                        </td>
                         <td>@item.Reason</td>
 
                         <td>
@@ -50,8 +132,22 @@
                         </td>
 
                         <td>
-                            <a href="/LeaveManagement/Approve/@item.LeaveId" class="btn btn-success btn-sm">Approve</a>
-                            <a href="/LeaveManagement/Reject/@item.LeaveId" class="btn btn-danger btn-sm">Reject</a>
+                            @if (item.Status == "Pending")
+                            {
+                                <a href="/LeaveManagement/Approve/@item.LeaveId"
+                                       class="btn btn-success btn-sm">
+                                    Approve
+                                </a>
+
+                                <a href="/LeaveManagement/Reject/@item.LeaveId"
+                                       class="btn btn-danger btn-sm">
+                                    Reject
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Completed</span>
+                            }
                         </td>
                     </tr>
                 }
@@ -59,4 +155,5 @@
         </table>
     </div>
 </div>
+
 

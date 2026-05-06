@@ -1,0 +1,135 @@
+﻿@using EmployeeManagementSystem.ReportsViewModels
+@model List<EmployeeReportVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<style>
+    @@media print {
+
+        body * {
+            visibility: hidden;
+        }
+
+        #printArea, #printArea * {
+            visibility: visible;
+        }
+
+        #printArea {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .btn, form {
+            display: none !important;
+        }
+    }
+    /* Hide normally */
+    .print-only {
+        display: none;
+    }
+
+    /* Show only during print */
+    @@media print {
+        .print-only {
+            display: block;
+        }
+    }
+</style>
+
+<h2 class="mb-3">Employee Report</h2>
+
+<!-- ================= FILTER SECTION (❌ NOT PRINTED) ================= -->
+<form method="get" class="row mb-3">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control"
+               placeholder="Search by employee name..." />
+    </div>
+
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">
+            Filter
+        </button>
+    </div>
+
+    <div class="col-md-2">
+        <a href="/Reports/EmployeeReport" class="btn btn-secondary w-100">
+            Reset
+        </a>
+    </div>
+
+    <div class="col-md-4 text-end d-flex justify-content-end gap-2">
+        <a class="btn btn-success"
+               href="/Reports/EmployeeReportPdf?search=@Context.Request.Query["search"]">
+            Export PDF
+        </a>
+
+        <button type="button" class="btn btn-danger"
+                onclick="window.print()">
+            Print
+        </button>
+    </div>
+</form>
+
+<!-- ================= PRINT AREA START ================= -->
+<div id="printArea">
+
+    <!-- 🔹 Title for Print -->
+    <div class="print-only">
+        <h3 class="text-center mb-3">Employee Report</h3>
+        <p>Date: @DateTime.Now.ToShortDateString()</p>
+    </div>
+
+    <!-- ================= SUMMARY ================= -->
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5>Total Employees</h5>
+                    <h3>@Model.Count</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TABLE ================= -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Employee Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Join Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.EmployeeId</td>
+                        <td>@item.FullName</td>
+                        <td>@item.DepartmentName</td>
+                        <td>@item.Designation</td>
+                        <td>@item.JoinDate.ToShortDateString()</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-danger">
+                        No records found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<!-- ================= PRINT AREA END ================= -->

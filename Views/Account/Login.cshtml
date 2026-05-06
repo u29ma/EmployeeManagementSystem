@@ -1,6 +1,7 @@
 ﻿
 @model EmployeeManagementSystem.Models.LoginModel
 @{
+    Layout = null;
     ViewData["Title"] = "Login";
 }
 
@@ -11,18 +12,60 @@
 
     <style>
             body {
-                margin: 0;
+                /* margin: 0; */
                 font-family: 'Segoe UI', sans-serif;
-                background: #f4f6f9;
+                background: white;
             }
 
-            .container {
-                min-height: 70vh;
+            /* .container {
+                min-height: 80vh;
+                width:80%; 
                 display: flex;
                 justify-content: center;
-                align-items: flex-start; /* move to top */
-                padding-top: 30px; /* add some space from top */
-            }
+                align-items: center;
+                margin-top: 70px;
+                margin-left: 150px;
+                background-image: url('/images/log1.jfif');
+                background-size: cover;
+            } */
+            .container {
+    min-height: 80vh;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 70px;
+    margin-left: 150px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* 🔥 Background Image Layer */
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-image: url('/images/log1.jfif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: blur(6px);
+    transform: scale(1.1); /* prevents white edges */
+
+    z-index: 0;
+}
+
+/* 🔥 Content stays clear */
+.container > * {
+    position: relative;
+    z-index: 1;
+}
 
 
             .login-box {
@@ -34,6 +77,11 @@
                 overflow: hidden;
                 box-shadow: 0 8px 25px rgba(0,0,0,0.1);
                 background: #fff;
+                position: relative;
+                z-index: 2;
+                backdrop-filter: blur(15px);
+                box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+                /* padding-top: 60px; */
             }
 
             /* LEFT */
@@ -60,7 +108,7 @@
                 }
 
                 .input-box input {
-                    width: 100%;
+                    width: 95%;
                     height: 38px;
                     margin-top: 5px;
                     padding: 0 10px;
@@ -142,7 +190,7 @@
             }
     </style>
 
-    <title>Login - EMS</title>
+    <title>Login</title>
 </head>
 
 <body>
