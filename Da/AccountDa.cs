@@ -20,12 +20,7 @@ namespace EmployeeManagementSystem.Da
                 .FirstOrDefault(u => u.Email == email && u.Password == password);
         }
 
-        // ✅ GET EMPLOYEE BY USERID
-        //public EmployeeModel GetEmployeeByUserId(int userId)
-        //{
-        //    return _context.Employees
-        //        .FirstOrDefault(e => e.UserId == userId);
-        //}
+        
         public EmployeeModel GetEmployeeByUserId(int userId)
         {
             var data = (from e in _context.Employees

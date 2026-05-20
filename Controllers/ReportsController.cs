@@ -1,5 +1,5 @@
 ﻿using EmployeeManagementSystem.Da;
-using iText.Kernel.Events;         
+using iText.Kernel.Events;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
@@ -110,7 +110,20 @@ namespace EmployeeManagementSystem.Controllers
                     "application/pdf",
                     "EmployeeReport.pdf");
             }
-        
-    }
+
+        }
+        //---------------------------------------------------------------------------------
+        public IActionResult PayrollReport(string search)
+        {
+            var data = _reportsDa.GetPayrollReport(search);
+
+            return View(data);
+        }
+        public IActionResult Payslip(int payrollId)
+        {
+            var data = _reportsDa.GetPayslip(payrollId);
+
+            return View(data);
+        }
     }
 }

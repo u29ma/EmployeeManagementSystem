@@ -1,0 +1,128 @@
+﻿@using EmployeeManagementSystem.ReportsViewModels
+@model PayslipVM
+
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<style>
+
+    .payslip-container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+
+    .salary-box {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    @@media print {
+
+        .sidebar,
+        .navbar,
+        .btn {
+            display: none !important;
+        }
+
+        .main-content {
+            margin: 0 !important;
+        }
+
+        .payslip-container {
+            box-shadow: none;
+        }
+    }
+
+</style>
+
+<div class="payslip-container">
+
+    <div class="text-center mb-4">
+
+        <h2>ABC Company Pvt Ltd</h2>
+
+        <h4>Employee Payslip</h4>
+
+        <p>
+            Salary Month:
+            <strong>@Model.Month</strong>
+        </p>
+
+    </div>
+
+    <hr />
+
+    <div class="row mb-2 ms-2">
+
+        <div class="col-md-6">
+            <p>
+                <strong>Employee:</strong>
+                @Model.EmployeeName
+            </p>
+
+            <p>
+                <strong>Department:</strong>
+                @Model.Department
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <p>
+                <strong>Designation:</strong>
+                @Model.Designation
+            </p>
+
+            <p>
+                <strong>Payment Date:</strong>
+                @Model.PaymentDate.ToShortDateString()
+            </p>
+        </div>
+
+    </div>
+
+    <div class="salary-box">
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Basic Salary</th>
+                <td>₹ @Model.BasicSalary</td>
+            </tr>
+
+            <tr>
+                <th>Bonus</th>
+                <td>₹ @Model.Bonus</td>
+            </tr>
+
+            <tr>
+                <th>Deduction</th>
+                <td>₹ @Model.Deduction</td>
+            </tr>
+
+            <tr class="table-success">
+                <th>Net Salary</th>
+                <td>
+                    <strong>
+                        ₹ @Model.NetSalary
+                    </strong>
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="mt-4 text-end">
+        <button class="btn btn-primary"
+                onclick="window.print()">
+            Print Payslip
+        </button>
+    </div>
+
+</div>

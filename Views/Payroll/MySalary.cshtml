@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="card p-3 text-center">
                 <h6>Total Paid</h6>
-                <h4>₹ @Model.Where(x => x.Status == "Approved").Sum(x => x.NetSalary)</h4>
+                <h4>₹ @Model.Where(x => x.Status == "Paid").Sum(x => x.NetSalary)</h4>
             </div>
         </div>
     </div>
@@ -31,13 +31,31 @@
             <div class="col-md-3">
                 <select name="status" class="form-control">
                     <option value="">All</option>
-                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
-                    <option value="Pending" selected="@(ViewBag.Status == "Pending")">Pending</option>
+
+                    <option value="Paid"
+                            selected="@(ViewBag.Status == "Paid")">
+                        Paid
+                    </option>
+
+                    <option value="Pending"
+                            selected="@(ViewBag.Status == "Pending")">
+                        Pending
+                    </option>
+
+                    <option value="Hold"
+                            selected="@(ViewBag.Status == "Hold")">
+                        Hold
+                    </option>
                 </select>
             </div>
 
             <div class="col-md-2">
                 <button class="btn btn-primary w-100">Filter</button>
+            </div>
+            <div class="col-md-2">
+                <a href="/Payroll/MySalary" class="btn btn-secondary w-100">
+                    Reset
+                </a>
             </div>
 
         </form>
@@ -50,6 +68,7 @@
                     <th>Year</th>
                     <th>Net Salary</th>
                     <th>Status</th>
+                    <th>Payslip</th>
                 </tr>
             </thead>
 
@@ -72,11 +91,47 @@
 
                             <!-- 🟢 Status -->
                             <td>
-                                <span class="badge px-3 py-2 @(item.Status == "Approved" 
-                                    ? "bg-success"
-                                    : "bg-warning text-dark")">
-                                    @item.Status
-                                </span>
+                                @if (item.Status == "Paid")
+                                {
+                                    <span class="badge bg-success px-3 py-2">
+                                        Paid
+                                    </span>
+                                }
+                                else if (item.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning text-dark px-3 py-2">
+                                        Pending
+                                    </span>
+                                }
+                                else if (item.Status == "Hold")
+                                {
+                                    <span class="badge bg-danger px-3 py-2">
+                                        Hold
+                                    </span>
+                                }
+                            </td>
+                           
+
+                            <!-- 📄 Payslip -->
+                            <td>
+
+                                @if (item.Status == "Paid")
+                                {
+                                    <a asp-controller="Reports"
+                                           asp-action="Payslip"
+                                           asp-route-payrollId="@item.PayrollId"
+                                           class="btn btn-sm btn-primary">
+
+                                        View Payslip
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Not Available
+                                    </span>
+                                }
+
                             </td>
                         </tr>
                     }

@@ -128,6 +128,11 @@ namespace EmployeeManagementSystem.Controllers
             _payrollDa.ApprovePayroll(id);
             return RedirectToAction("Index");
         }
+        public IActionResult Hold(int id)
+        {
+            _payrollDa.HoldPayroll(id);
+            return RedirectToAction("Index");
+        }
 
         // ================= EMPLOYEE =================
 

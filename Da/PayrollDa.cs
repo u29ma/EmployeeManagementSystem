@@ -62,7 +62,17 @@ namespace EmployeeManagementSystem.Da
             var data = _context.Payroll.Find(id);
             if (data != null)
             {
-                data.Status = "Approved";
+                data.Status = "Paid";
+                _context.SaveChanges();
+            }
+        }
+        public void HoldPayroll(int id)
+        {
+            var data = _context.Payroll.Find(id);
+
+            if (data != null)
+            {
+                data.Status = "Hold";
                 _context.SaveChanges();
             }
         }

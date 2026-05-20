@@ -1,0 +1,122 @@
+﻿@using EmployeeManagementSystem.ReportsViewModels
+@model List<PayrollReportVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<style>
+    .print-only {
+        display: none;
+    }
+
+    @@media print {
+
+        .print-only {
+            display: block;
+        }
+
+        .sidebar,
+        .navbar,
+        .btn,
+        form {
+            display: none !important;
+        }
+
+        .main-content {
+            margin: 0 !important;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="print-only">
+    <h3 class="text-center">Payroll Report</h3>
+    <p>Date: @DateTime.Now.ToShortDateString()</p>
+</div>
+
+<h2 class="mb-3">Payroll Report</h2>
+
+<form method="get" class="row mb-3">
+
+    <div class="col-md-4">
+        <input type="text"
+               name="search"
+               class="form-control"
+               placeholder="Search employee..." />
+    </div>
+
+    <div class="col-md-2">
+        <button type="submit"
+                class="btn btn-primary w-100">
+            Search
+        </button>
+    </div>
+    <div class="col-md-2">
+        <a href="/Reports/PayrollReport" class="btn btn-secondary w-100">
+            Reset
+        </a>
+    </div>
+
+    <div class="col-md-4 text-end d-flex justify-content-end gap-2">
+        <button type="button"
+                class="btn btn-success"
+                onclick="window.print()">
+            Print
+        </button>
+    </div>
+
+</form>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>Total Payroll Records: @Model.Count</h5>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+
+        <tr>
+            <th>ID</th>
+            <th>Employee</th>
+            <th>Basic Salary</th>
+            <th>Bonus</th>
+            <th>Deduction</th>
+            <th>Net Salary</th>
+            <th>Month</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.PayrollId</td>
+
+                <td>@item.EmployeeName</td>
+
+                <td>₹ @item.BasicSalary</td>
+
+                <td>₹ @item.Bonus</td>
+
+                <td>₹ @item.Deduction</td>
+
+                <td>
+                    <strong>
+                        ₹ @item.NetSalary
+                    </strong>
+                </td>
+
+                <td>@item.Month</td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

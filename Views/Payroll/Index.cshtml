@@ -50,8 +50,17 @@
             <div class="col-md-2">
                 <select name="status" class="form-control">
                     <option value="">All Status</option>
-                    <option value="Approved" selected="@(ViewBag.Status == "Approved")">Approved</option>
-                    <option value="Pending" selected="@(ViewBag.Status == "Pending")">Pending</option>
+                    <option value="Paid" selected="@(ViewBag.Status == "Paid")">
+                        Paid
+                    </option>
+
+                    <option value="Pending" selected="@(ViewBag.Status == "Pending")">
+                        Pending
+                    </option>
+
+                    <option value="Hold" selected="@(ViewBag.Status == "Hold")">
+                        Hold
+                    </option>
                 </select>
             </div>
 
@@ -100,23 +109,62 @@
 
                         <!-- 🟢 Status -->
                         <td>
-                            <span class="badge px-3 py-2 @(item.Status == "Approved" ? "bg-success" : "bg-warning text-dark")">
-                                @item.Status
-                            </span>
+                            @if (item.Status == "Paid")
+                            {
+                                <span class="badge bg-success px-3 py-2">
+                                    Paid
+                                </span>
+                            }
+                            else if (item.Status == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark px-3 py-2">
+                                    Pending
+                                </span>
+                            }
+                            else if (item.Status == "Hold")
+                            {
+                                <span class="badge bg-danger px-3 py-2">
+                                    Hold
+                                </span>
+                            }
                         </td>
 
                         <!-- ⚙ Action -->
                         <td>
-                            @if (item.Status != "Approved")
+                            <!-- Payslip Button -->
+                            @if (item.Status == "Paid")
+                            {
+                                <a asp-controller="Reports"
+                                       asp-action="Payslip"
+                                       asp-route-payrollId="@item.PayrollId"
+                                       class="btn btn-sm btn-info mb-1">
+
+                                    Payslip
+                                </a>
+                            }
+                            @if (item.Status == "Pending")
                             {
                                 <a href="/Payroll/Approve/@item.PayrollId"
                                        class="btn btn-sm btn-success">
-                                    ✔ Approve
+                                    ✔ Mark Paid
+                                </a>
+
+                                <a href="/Payroll/Hold/@item.PayrollId"
+                                       class="btn btn-sm btn-danger">
+                                    Hold
                                 </a>
                             }
-                            else
+                            else if (item.Status == "Paid")
                             {
-                                <span class="text-muted">Done</span>
+                                <span class="text-success fw-bold">
+                                    Paid
+                                </span>
+                            }
+                            else if (item.Status == "Hold")
+                            {
+                                <span class="text-danger fw-bold">
+                                    On Hold
+                                </span>
                             }
                         </td>
                     </tr>

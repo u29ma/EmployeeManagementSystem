@@ -1,60 +1,65 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@* @{
-    Layout = "~/Views/Shared/_Layout1.cshtml";
-}
+﻿@model List<EmployeeManagementSystem.Models.AttendanceModel>
 
-<h2>Attendance</h2>
-
-<a href="/Attendance/CheckIn" class="btn btn-success">Check In</a>
-<a href="/Attendance/CheckOut" class="btn btn-danger">Check Out</a>
-<a href="/Attendance/MyAttendance" class="btn btn-primary">View My Attendance</a>
- *@
 @{
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
 
-<h2>Attendance</h2>
+<div class="container mt-4">
 
-<a href="/Attendance/CheckIn" class="btn btn-success">Check In</a>
-<a href="/Attendance/CheckOut" class="btn btn-danger">Check Out</a>
+    <h2 class="mb-3">Attendance</h2>
 
-<button id="btnView" class="btn btn-primary">View My Attendance</button>
+    <div class="mb-3">
+        <button id="btnCheckIn" class="btn btn-success">
+            Check In
+        </button>
 
-<hr />
+        <button id="btnCheckOut" class="btn btn-danger">
+            Check Out
+        </button>
+    </div>
 
-<div id="attendanceContainer"></div>
+    <div id="attendanceContainer">
+
+        <partial name="_MyAttendancePartial" model="Model" />
+
+    </div>
+
+</div>
 
 @section Scripts {
+
     <script>
-        // document.getElementById("btnView").addEventListener("click", function () {
 
-        //     fetch('/Attendance/GetMyAttendance')
-        //         .then(res => res.text())
-        //         .then(data => {
-        //             document.getElementById("attendanceContainer").innerHTML = data;
-        //         });
-
-        // });
-                let visible = false;
-
-        document.getElementById("btnView").addEventListener("click", function () {
-
-            if (visible) {
-                document.getElementById("attendanceContainer").innerHTML = "";
-                visible = false;
-                return;
-            }
+        function loadAttendance() {
 
             fetch('/Attendance/GetMyAttendance')
                 .then(res => res.text())
                 .then(data => {
+
                     document.getElementById("attendanceContainer").innerHTML = data;
-                    visible = true;
                 });
-        });
+        }
+
+        document.getElementById("btnCheckIn")
+            .addEventListener("click", function () {
+
+                fetch('/Attendance/CheckIn')
+                    .then(() => {
+
+                        loadAttendance();
+                    });
+            });
+
+        document.getElementById("btnCheckOut")
+            .addEventListener("click", function () {
+
+                fetch('/Attendance/CheckOut')
+                    .then(() => {
+
+                        loadAttendance();
+                    });
+            });
 
     </script>
-}
 
+}

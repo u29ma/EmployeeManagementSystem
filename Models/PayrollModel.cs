@@ -27,6 +27,6 @@ public class PayrollModel
 
     [Required]
     public int? SalaryYear { get; set; }
-    public DateTime? PaymentDate { get; set; }
+    public DateTime PaymentDate { get; set; }
 }
 

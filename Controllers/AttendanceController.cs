@@ -21,7 +21,11 @@ namespace EmployeeManagementSystem.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            int empId = Convert.ToInt32(HttpContext.Session.GetString("EmployeeId"));
+
+            var attendance = _attendanceDa.GetEmployeeAttendance(empId);
+
+            return View(attendance);
         }
 
         public IActionResult CheckIn()
@@ -29,7 +33,7 @@ namespace EmployeeManagementSystem.Controllers
             int empId = int.Parse(HttpContext.Session.GetString("EmployeeId"));
             _attendanceDa.CheckIn(empId);
 
-            return RedirectToAction("MyAttendance");
+            return RedirectToAction("Index");
         }
 
         public IActionResult CheckOut()
@@ -37,16 +41,9 @@ namespace EmployeeManagementSystem.Controllers
             int empId = int.Parse(HttpContext.Session.GetString("EmployeeId"));
             _attendanceDa.CheckOut(empId);
 
-            return RedirectToAction("MyAttendance");
+            return RedirectToAction("Index");
         }
 
-        public IActionResult MyAttendance()
-        {
-            int empId = int.Parse(HttpContext.Session.GetString("EmployeeId"));
-            var data = _attendanceDa.GetEmployeeAttendance(empId);
-
-            return View(data);
-        }
         public IActionResult GetMyAttendance()
         {
             int empId = int.Parse(HttpContext.Session.GetString("EmployeeId"));
