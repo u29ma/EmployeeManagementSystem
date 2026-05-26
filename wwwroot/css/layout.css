@@ -1,0 +1,101 @@
+﻿
+.header {
+    /*flex: 1;*/
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+@@media(max-width:768px) {
+
+    .menu {
+        gap: 15px;
+        font-size: 14px;
+    }
+
+    .auth-buttons {
+        margin-right: 10px;
+        gap: 10px;
+    }
+
+    .user-email {
+        display: none;
+    }
+}
+/* Center menu */
+.menu {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+    .menu li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .menu li a::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 2px;
+            background: orange;
+            transition: width 0.3s;
+        }
+
+        .menu li a:hover::after {
+            width: 100%;
+        }
+
+/* Right side buttons */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-right: 50px;
+}
+/* Buttons */
+.btn-login {
+    text-decoration: none;
+    padding: 8px 18px;
+    background: crimson;
+    border-radius: 10px;
+    border: none;
+    color: white;
+}
+
+    .btn-login:hover {
+        transform: scale(1.05);
+    }
+
+.btn-register {
+    text-decoration: none;
+    padding: 8px 18px;
+    background: linear-gradient(to right, orange, gold);
+    border-radius: 10px;
+    color: white;
+}
+
+    .btn-register:hover {
+        transform: scale(1.05);
+    }
+/* Logout */
+.btn-logout {
+    color: red;
+    text-decoration: none;
+}
+
+/* Email */
+.user-email {
+    font-size: 14px;
+    color: #555;
+}

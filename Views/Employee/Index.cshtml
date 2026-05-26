@@ -86,14 +86,14 @@
                             <td>₹@item.Salary</td>
 
                             <td>
-                                @if (item.Status)
-                                {
-                                    <span class="badge bg-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-warning text-dark">Inactive</span>
-                                }
+                               @if (item.Status == true)
+                               {
+                                   <span class="badge bg-success"> Active </span>
+                               }
+                               else
+                               {
+                                   <span class="badge bg-warning text-dark"> Inactive  </span>
+                               }
                             </td>
 
                             <td>

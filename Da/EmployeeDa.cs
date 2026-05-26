@@ -1,6 +1,7 @@
 ﻿
 using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Models;
+using EmployeeManagementSystem.ReportsViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,13 +72,19 @@ namespace EmployeeManagementSystem.Da
             {
                 throw new Exception("Email already exists");
             }
+            // ✅ Get Role Name from RoleId
+            var roleName = _context.Roles
+                .Where(r => r.RoleId == emp.RoleId)
+                .Select(r => r.RoleName)
+                .FirstOrDefault();
+
             // Step 1: Create User
             var user = new UserModel
             {
                 Email = email,
                 Password = password,
                 Username = emp.FirstName + " " + emp.LastName,
-                Role = "Employee"
+                Role = roleName
             };
             _context.Users.Add(user);
             _context.SaveChanges(); // 🔥 Important to get UserId
@@ -85,16 +92,21 @@ namespace EmployeeManagementSystem.Da
             // Step 2: Link Employee with User
             emp.UserId = user.UserId;
             emp.Status = true;   // ✅ Active
-
             _context.Employees.Add(emp);
             _context.SaveChanges(); // 🔥 gives EmployeeId
 
             // ✅ Step 4: UPDATE User with EmployeeId 
             user.EmployeeId = emp.EmployeeId;
-
             _context.Users.Update(user);
             _context.SaveChanges();
 
+        }
+
+        public List<DesignationModel> GetDesignationsByDepartment(int departmentId)
+        {
+            return _context.Designations
+                .Where(d => d.DepartmentId == departmentId)
+                .ToList();
         }
 
         // Get by Id
@@ -203,6 +215,33 @@ namespace EmployeeManagementSystem.Da
                         DepartmentName = d.DepartmentName,
                         Salary = e.Salary
                     }).ToList();
+        }
+        public EmployeeModel GetEmployeesById(int id)
+        {
+            return _context.Employees
+                .FirstOrDefault(x => x.EmployeeId == id);
+        }
+        public ProfileViewModel GetEmployeeProfile(int id)
+        {
+            var employee = _context.Employees
+                .FirstOrDefault(x => x.EmployeeId == id);
+
+            var presentDays = _context.Attendance
+                .Count(x => x.EmployeeId == id && x.Status == "Present");
+
+            var totalLeaves = _context.Leaves
+                .Count(x => x.EmployeeId == id);
+
+            var payrollGenerated = _context.Payroll
+                .Count(x => x.EmployeeId == id);
+
+            return new ProfileViewModel
+            {
+                Employee = employee,
+                PresentDays = presentDays,
+                TotalLeaves = totalLeaves,
+                PayrollGenerated = payrollGenerated
+            };
         }
     }
 }

@@ -125,5 +125,16 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(data);
         }
+
+        public IActionResult AttendanceReport( string search, string month)
+        {
+            var data = _reportsDa
+                .GetAttendanceReport(search, month);
+
+            ViewBag.Search = search;
+            ViewBag.Month = month;
+
+            return View(data);
+        }
     }
 }

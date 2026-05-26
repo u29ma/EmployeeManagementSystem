@@ -1,0 +1,169 @@
+﻿@using EmployeeManagementSystem.ReportsViewModels
+@model List<AttendanceReportVM>
+
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<style>
+
+    .print-only {
+        display: none;
+    }
+
+    @@media print {
+
+        .print-only {
+            display: block;
+        }
+
+        .sidebar,
+        .navbar,
+        .btn,
+        form {
+            display: none !important;
+        }
+
+        .main-content {
+            margin: 0 !important;
+            width: 100%;
+        }
+    }
+
+</style>
+
+<div class="print-only">
+    <h3 class="text-center">
+        Attendance Report
+    </h3>
+
+    <p>
+        Date:
+        @DateTime.Now.ToShortDateString()
+    </p>
+</div>
+
+<h2 class="mb-3">
+    Attendance Report
+</h2>
+
+<form method="get" class="row mb-3">
+
+    <!-- Search -->
+    <div class="col-md-4">
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="form-control"
+               placeholder="Search employee..." />
+    </div>
+
+    <!-- Month -->
+    <div class="col-md-3">
+        <select name="month"
+                class="form-control">
+
+            <option value="">
+                All Months
+            </option>
+
+            @{
+                var months = System.Globalization
+                .CultureInfo.CurrentCulture
+                .DateTimeFormat.MonthNames;
+            }
+
+            @foreach (var m in months)
+            {
+                if (!string.IsNullOrEmpty(m))
+                {
+                    <option value="@m"
+                            selected="@(ViewBag.Month == m)">
+                        @m
+                    </option>
+                }
+            }
+
+        </select>
+    </div>
+
+    <!-- Filter -->
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100">
+            Filter
+        </button>
+    </div>
+
+    <!-- Print -->
+    <div class="col-md-3 d-flex justify-content-end">
+        <button type="button"
+                onclick="window.print()"
+                class="btn btn-danger">
+            Print
+        </button>
+    </div>
+
+</form>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>
+            Total Attendance:
+            @Model.Count
+        </h5>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+
+        <tr>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Status</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.EmployeeName</td>
+
+                <td>
+                    @item.Date.ToShortDateString()
+                </td>
+
+                <td>@item.CheckInTime</td>
+
+                <td>@item.CheckOutTime</td>
+
+                <td>
+
+                    @if (item.Status == "Present")
+                    {
+                        <span class="badge bg-success">
+                            Present
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">
+                            Absent
+                        </span>
+                    }
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

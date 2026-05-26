@@ -29,6 +29,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddControllers();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -44,6 +49,9 @@ if (!app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+app.UseSwagger();
+
+app.UseSwaggerUI();
 app.UseRouting();
 
 app.UseSession();
@@ -59,13 +67,15 @@ app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
+//app.UseSwagger();
 
+//app.UseSwaggerUI();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
+app.MapControllers();
 
 app.Run();

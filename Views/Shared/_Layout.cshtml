@@ -1,111 +1,58 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-            /* Center menu */
-            .menu {
-                display: flex;
-                list-style: none;
-                gap: 30px;
-                margin: 0;
-                padding: 0;
-            }
-
-                .menu li a {
-                    text-decoration: none;
-                    color: #333;
-                    font-weight: 500;
-                    transition: 0.3s;
-                }
-                .menu li a:hover {
-    color: orange;
-}
-
-/* Right side buttons */
-.auth-buttons {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-right: 50px;
-}
-/* Buttons */
-.btn-login {
-    text-decoration: none;
-    padding: 8px 18px;
-    background: crimson;
-    border-radius: 10px;
-    border: none;
-    color: white;
-}
-
-.btn-login:hover {
-   transform: scale(1.05);
-}
-.btn-register {
-    text-decoration: none;
-    padding: 8px 18px;
-    background: linear-gradient(to right, orange, gold);
-    border-radius: 10px;
-    color: white;
-}
-
-.btn-register:hover {
-    transform: scale(1.05);
-}
-/* Logout */
-.btn-logout {
-    color: red;
-    text-decoration: none;
-}
-
-/* Email */
-.user-email {
-    font-size: 14px;
-    color: #555;
-}
-    </style>
+    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - EmployeeManagementSystem</title>
     <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/layout.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EmployeeManagementSystem.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+    }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <div style="margin-left:50px;">
                     <img src="~/images/Logo1.png" style=" width:100px;height:40px;margin-left:40px;" />
-                    <p style="color:orangered;font-size:small;font-family:Arial;">Employee Management Sysytem</p>
+                    <p style="color:orangered;font-size:small;font-family:Arial;">Employee Management System</p>
                 </div>
                 
                 <div class="header">
                     <!-- CENTER: Menu -->
                     <ul class="menu">
                         <li>
-                            <a asp-controller="Home" asp-action="Index">Home</a>
+                            <a asp-controller="Home" asp-action="Index" class="@(action == "Index" ? "text-warning fw-bold" : "")">
+                                Home
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Home" asp-action="About">About Us</a>
+                            <a asp-controller="Home"
+                                   asp-action="About"
+                                   class="@(action == "About" ? "text-warning fw-bold" : "")">
+
+                                About Us
+
+                            </a>
                         </li>
                         <li>
-                            <a asp-controller="Home" asp-action="Contact">Contact Us</a>
+                            <a asp-controller="Home"
+                                   asp-action="Contact"
+                                   class="@(action == "Contact" ? "text-warning fw-bold" : "")">
+
+                                Contact Us
+
+                            </a>
                         </li>
                     </ul>
-                   @*  <ul class="menu">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About Us</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Contect Us</a>
-                        </li>
-                    </ul> *@
                 </div>
+
                 <!-- RIGHT: Auth Buttons -->
                 <div class="auth-buttons">
 
@@ -120,7 +67,16 @@
                             @Context.Session.GetString("UserEmail")
                         </span>
 
-                        <a href="/Account/Logout" class="btn-logout">Logout</a>
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+
+                            <button type="submit"
+                                    class="btn-logout border-0 bg-transparent">
+
+                                Logout
+
+                            </button>
+
+                        </form>
                     }
 
                 </div>
@@ -138,5 +94,10 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <footer class="text-center text-muted py-3 border-top mt-4">
+
+        © 2026 Employee Management System
+
+    </footer>
 </body>
 </html>

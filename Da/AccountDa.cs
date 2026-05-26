@@ -16,11 +16,14 @@ namespace EmployeeManagementSystem.Da
         // ✅ LOGIN
         public UserModel ValidateUser(string email, string password)
         {
-            return _context.Users
-                .FirstOrDefault(u => u.Email == email && u.Password == password);
+            return _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
         }
 
-        
+        public string GetRoleName(int roleId)
+        {
+            return _context.Roles.Where(r => r.RoleId == roleId).Select(r => r.RoleName).FirstOrDefault();
+        }
+
         public EmployeeModel GetEmployeeByUserId(int userId)
         {
             var data = (from e in _context.Employees
@@ -84,6 +87,45 @@ namespace EmployeeManagementSystem.Da
         {
             return _context.Employees
                 .FirstOrDefault(e => e.Email == email);
+        }
+        public bool ChangePassword(int employeeId, string currentPassword, string newPassword)
+        {
+            var user = _context.Employees
+                .FirstOrDefault(x => x.EmployeeId == employeeId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Check current password
+            if (user.Password != currentPassword)
+            {
+                return false;
+            }
+
+            // Update password
+            user.Password = newPassword;
+
+            _context.SaveChanges();
+
+            return true;
+        }
+        public bool ResetPassword(string email, string newPassword)
+        {
+            var user = _context.Employees
+                .FirstOrDefault(x => x.Email == email);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.Password = newPassword;
+
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

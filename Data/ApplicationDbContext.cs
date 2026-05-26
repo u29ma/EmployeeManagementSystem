@@ -12,7 +12,9 @@ namespace EmployeeManagementSystem.Data
             } 
         public DbSet<EmployeeModel> Employees { get; set; }
         public DbSet<DepartmentModel> Departments { get; set; }
+        public DbSet<DesignationModel> Designations { get; set; }
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
         public DbSet<LeaveManagementModel> Leaves { get; set; }
         public DbSet<LeaveTypeModel> LeaveTypes { get; set; }
         public DbSet<PayrollModel> Payroll { get; set; }

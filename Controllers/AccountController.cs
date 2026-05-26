@@ -32,24 +32,51 @@ namespace EmployeeManagementSystem.Controllers
 
             var user = _da.ValidateUser(model.Email, model.Password);
 
+            // ❌ Invalid User
+            if (user == null)
+            {
+                ViewBag.Error = "Invalid Email or Password";
+                return View(model);
+            }
+
+            // 🔹 Get Employee
+            var employee = _da.GetEmployeeByUserId(user.UserId);
+
+            // ❌ Employee not found
+            if (employee == null)
+            {
+                ViewBag.Error = "Employee record not found";
+                return View(model);
+            }
+
+            // ❌ Inactive Employee
+            if (employee.Status == false)
+            {
+                ViewBag.Error = "Account is inactive";
+                return View(model);
+            }
+            // 🔥 Get Role Name from Roles Table
+            string roleName = _da.GetRoleName(employee.RoleId);
+            if (string.IsNullOrEmpty(roleName))
+            {
+                roleName = "Employee";
+            }
+
             if (user != null)
             {
                 // ✅ Session
                 HttpContext.Session.SetString("UserEmail", user.Email);
-                HttpContext.Session.SetString("Role", user.Role);
+                HttpContext.Session.SetString("Role", roleName);
                 HttpContext.Session.SetString("UserId", user.UserId.ToString());
                 HttpContext.Session.SetString("UserName", user.Username);
                 HttpContext.Session.SetString("EmployeeId", user.EmployeeId.ToString());
-
-                // 🔹 Employee Mapping
-                var employee = _da.GetEmployeeByUserId(user.UserId);
 
                 if (employee != null)
                 {
                     HttpContext.Session.SetString("EmployeeId", employee.EmployeeId.ToString());
 
                     // 🔥 Redirect if profile not complete
-                    if (!employee.IsProfileComplete)
+                    if(employee.IsProfileComplete != true)
                     {
                         return RedirectToAction("CompleteProfile", "Employee");
                     }
@@ -60,7 +87,7 @@ namespace EmployeeManagementSystem.Controllers
                 }
 
                 // ✅ Role-based redirect
-                if (user.Role == "Admin")
+                if (roleName == "Admin")
                 {
                     return RedirectToAction("Index", "AdminDashboard");
                 }
@@ -110,11 +137,15 @@ namespace EmployeeManagementSystem.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var user = _da.GetByEmail(model.Email);
 
             if (user != null)
             {
-                ViewBag.Message = "Your password is: " + user.Password;
+                ViewBag.Message = "Password reset link sent to your email";//"Your password is: " + user.Password;
             }
             else
             {
@@ -124,140 +155,94 @@ namespace EmployeeManagementSystem.Controllers
             return View();
         }
 
-        // Logout
+        [HttpPost]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+
+            return RedirectToAction("Login", "Account");
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            string employeeId =
+                HttpContext.Session.GetString("EmployeeId");
+
+            if (string.IsNullOrEmpty(employeeId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            // Confirm password check
+            if (model.NewPassword != model.ConfirmPassword)
+            {
+                ViewBag.Error = "Passwords do not match";
+
+                return View();
+            }
+
+            int id = Convert.ToInt32(employeeId);
+
+            bool result = _da.ChangePassword(
+                id,
+                model.CurrentPassword,
+                model.NewPassword);
+
+            if (!result)
+            {
+                ViewBag.Error =
+                    "Current password is incorrect";
+
+                return View();
+            }
+
+            ViewBag.Success =
+                "Password changed successfully";
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string email, string token)
+        {
+            var model = new ResetPasswordModel
+            {
+                Email = email,
+                Token = token
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword( ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            bool result = _da.ResetPassword(model.Email, model.NewPassword);
+
+            if (!result)
+            {
+                ViewBag.Message =
+                    "Unable to reset password";
+
+                return View(model);
+            }
+
+            TempData["Success"] =
+                "Password reset successful";
+
             return RedirectToAction("Login");
         }
     }
 }
-
-//using EmployeeManagementSystem.Da;
-//using EmployeeManagementSystem.Data;
-//using EmployeeManagementSystem.Models;
-//using Microsoft.AspNetCore.Mvc;
-//using System.Linq;
-
-//namespace EmployeeManagementSystem.Controllers
-//{
-//    public class AccountController : Controller
-//    {
-
-//        private readonly ApplicationDbContext _context;
-
-//        public AccountController(ApplicationDbContext context)
-//        {
-//            _context = context;
-//        }
-
-//        // GET: Login Page
-//        public IActionResult Login()
-//        {
-
-//                return View();
-//        }
-
-//        // POST: Login Process      
-//        [HttpPost]
-//        public IActionResult Login(LoginModel model)
-//        {
-//            if (!ModelState.IsValid)
-//            {
-//                return View(model);
-//            }
-
-//            if (ModelState.IsValid)
-//            {
-//                var user = _context.Users
-//                    .FirstOrDefault(u => u.Email == model.Email
-//                                      && u.Password == model.Password);
-
-//                if (user != null)
-//                {
-//                    // Store session
-//                    HttpContext.Session.SetString("UserEmail", user.Email);
-//                    HttpContext.Session.SetString("Role", user.Role);
-
-//                    HttpContext.Session.SetString("UserId", user.UserId.ToString());
-
-//                    // 🔥 IMPORTANT PART - Emp Mapping
-//                    var employee = _context.Employees
-//                        .FirstOrDefault(e => e.UserId == user.UserId);
-
-//                    if (employee != null)
-//                    {
-//                        HttpContext.Session.SetString("EmployeeId", employee.EmployeeId.ToString());
-//                    }
-//                    else
-//                    {
-//                        // Optional: handle if employee record missing
-//                        HttpContext.Session.SetString("EmployeeId", "0");
-//                    }
-
-
-//                    // ✅ ROLE-BASED REDIRECTION
-//                    if (user.Role == "Admin")
-//                    {
-//                        return RedirectToAction("Index", "AdminDashboard");
-//                    }
-//                    else if (user.Role == "Employee")
-//                    {
-//                        return RedirectToAction("Index", "Dashboard");
-//                    }
-
-//                }
-//                else
-//                {
-//                    ViewBag.Error = "Invalid Email or Password";
-//                }
-//            }
-
-//            return View(model);
-//        }
-
-//        [HttpPost]
-//        public IActionResult Register(RegisterModel model)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                var user = new Users
-//                {
-//                    Name = model.Name,
-//                    Email = model.Email,
-//                    Password = model.Password,
-//                    Role = "Employee"
-//                };
-
-//                _context.Users.Add(user);
-//                _context.SaveChanges();
-
-//                var employee = new Employees
-//                {
-//                    UserId = user.UserId,
-//                    Email = user.Email,
-//                    Status = "Active",
-//                    IsProfileComplete = false
-//                };
-
-//                _context.Employees.Add(employee);
-//                _context.SaveChanges();
-
-//                return RedirectToAction("Login");
-//            }
-
-//            return View(model);
-//        }
-
-
-//        // Logout
-//        public IActionResult Logout()
-//        {
-//            HttpContext.Session.Clear();
-//            return RedirectToAction("Login", "Account");
-//            //return RedirectToAction("Login");
-//        }
-//    }
-
-//}
 

@@ -149,7 +149,40 @@ namespace EmployeeManagementSystem.Controllers
 
             return RedirectToAction("Index", "Dashboard");
         }
+        public IActionResult Profile()
+        {
+            string employeeId = HttpContext.Session.GetString("EmployeeId");
 
+            if (string.IsNullOrEmpty(employeeId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            int id = Convert.ToInt32(employeeId);
+
+            var model = _employeeDa.GetEmployeeProfile(id);
+
+            return View(model);
+
+            //if (employee == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(employee);
+        }
+        public JsonResult GetDesignationsByDepartment(int departmentId)
+        {
+            var designations = _employeeDa.GetDesignationsByDepartment(departmentId);
+
+            var result = designations.Select(d => new
+            {
+                designationId = d.DesignationId,
+                designationName = d.DesignationName
+            });
+
+            return Json(result);
+        }
 
     }
 }

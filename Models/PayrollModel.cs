@@ -21,7 +21,7 @@ public class PayrollModel
     public string Status { get; set; } = "Pending";
 
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public decimal NetSalary { get; private set; }
+    public decimal NetSalary { get; set; }
 
     public string SalaryMonth { get; set; }
 

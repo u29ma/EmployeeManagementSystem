@@ -1,13 +1,9 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout1.cshtml";
-}
-
-
-@model EmployeeManagementSystem.Models.EmployeeModel
-
+﻿@model EmployeeManagementSystem.Models.EmployeeModel
 @{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
     ViewData["Title"] = "Add Employee";
 }
+
 <style>
     .card {
         border-radius: 10px;
@@ -32,7 +28,7 @@
     }
 
 </style>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container mt-3">
 
     <div class="card shadow-sm">
@@ -112,10 +108,36 @@
                         </select>
                     </div>
 
+                    <div class="col-md-6 mb-3">
+                        <label>Role</label>
+
+                        <select asp-for="RoleId" class="form-select">
+
+                            <option value="">-- Select Role --</option>
+
+                            @foreach (var role in ViewBag.Roles)
+                            {
+                                <option value="@role.RoleId">
+                                    @role.RoleName
+                                </option>
+                            }
+
+                        </select>
+                    </div>
+
                     <!-- Designation -->
                     <div class="col-md-6 mb-3">
+
                         <label>Designation</label>
-                        <input asp-for="Designation" class="form-control" placeholder="Enter designation" />
+
+                        <select asp-for="DesignationId" class="form-select" id="designationDropdown">
+
+                            <option value="">
+                                -- Select Designation --
+                            </option>
+
+                        </select>
+
                     </div>
 
                     <!-- Joining Date -->
@@ -162,3 +184,39 @@
     </div>
 
 </div>
+
+<script>
+
+    $("#DepartmentId").change(function () {
+
+        var deptId = $(this).val();
+
+        $.get('/Employee/GetDesignationsByDepartment',
+            { departmentId: deptId },
+
+            function (data) {
+
+                $("#designationDropdown").empty();
+
+                $("#designationDropdown").append(
+                    '<option value="">-- Select Designation --</option>'
+                );
+
+                $.each(data, function (i, item) {
+
+                    $("#designationDropdown").append(
+
+                        '<option value="' +
+                        item.designationId +
+                        '">' +
+                        item.designationName +
+                        '</option>'
+                    );
+
+                });
+
+            });
+
+    });
+
+</script>
