@@ -21,6 +21,8 @@
         var role = Context.Session.GetString("Role");
         var userName = Context.Session.GetString("UserName");
         var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+    
     }
 
     <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow fixed-top">
@@ -240,12 +242,12 @@
                 </a>
                 @* <a href="/Announcement/EmployeeAnnouncements"><i class="fa fa-bullhorn"></i>   View Announcements</a> *@
             }
-
+           
             @if (role == "Admin")
             {
                 <a href="#reportSubMenu"
                        data-bs-toggle="collapse"
-                       class="d-flex justify-content-between align-items-center">
+                       class="d-flex justify-content-between align-items-center @(controller == "Reports" ? "active" : "")">
 
                     <span>
                         <i class="fa fa-chart-bar"></i> Reports
@@ -254,10 +256,10 @@
                     <i class="fa fa-chevron-down small"></i>
                 </a>
 
-                <div class="collapse ps-4 mt-1" id="reportSubMenu">
-                    <a asp-controller="Reports" asp-action="EmployeeReport"><i class="fa fa-file-lines"></i> Employee Report </a>
-                    <a asp-controller="Reports" asp-action="PayrollReport"><i class="fa fa-money-bill"></i> Payroll Report </a>
-                    <a asp-controller="Reports" asp-action="AttendanceReport"><i class="fa fa-clock"></i> Attendance Report</a>
+                <div class="collapse ps-4 mt-1  @(controller == "Reports" ? "show" : "")" id="reportSubMenu">
+                    <a asp-controller="Reports" asp-action="EmployeeReport" class="@(action == "EmployeeReport" ? "active" : "")"><i class="fa fa-file-lines"></i> Employee Report </a>
+                    <a asp-controller="Reports" asp-action="PayrollReport" class="@(action == "PayrollReport" ? "active" : "")"><i class="fa fa-money-bill"></i> Payroll Report </a>
+                    <a asp-controller="Reports" asp-action="AttendanceReport" class="@(action == "AttendanceReport" ? "active" : "")"><i class="fa fa-clock"></i> Attendance Report</a>
                 </div>
             }
 

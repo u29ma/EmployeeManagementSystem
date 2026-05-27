@@ -57,10 +57,10 @@ namespace EmployeeManagementSystem.Controllers
             }
             // 🔥 Get Role Name from Roles Table
             string roleName = _da.GetRoleName(employee.RoleId);
-            if (string.IsNullOrEmpty(roleName))
-            {
-                roleName = "Employee";
-            }
+            //if (string.IsNullOrEmpty(roleName))
+            //{
+            //    roleName = "Employee";
+            //}
 
             if (user != null)
             {

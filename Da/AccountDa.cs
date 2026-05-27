@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementSystem.Data;
 using EmployeeManagementSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace EmployeeManagementSystem.Da
@@ -21,7 +22,12 @@ namespace EmployeeManagementSystem.Da
 
         public string GetRoleName(int roleId)
         {
-            return _context.Roles.Where(r => r.RoleId == roleId).Select(r => r.RoleName).FirstOrDefault();
+            var role = _context.Roles
+       .FromSqlRaw("SELECT RoleId, RoleName FROM Roles WHERE RoleId = {0}", roleId)
+       .FirstOrDefault();
+
+            return role?.RoleName;
+            //return _context.Roles.Where(r => r.RoleId == roleId).Select(r => r.RoleName).FirstOrDefault();
         }
 
         public EmployeeModel GetEmployeeByUserId(int userId)

@@ -29,7 +29,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -65,7 +65,7 @@ app.UseSession();
 
 //builder.Services.AddAuthorization();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 //app.UseSwagger();
 

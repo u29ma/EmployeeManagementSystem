@@ -136,3 +136,9 @@
 .rotate-icon {
     transition: 0.3s;
 }
+.active {
+    background-color: #0d6efd;
+    color: white !important;
+    border-radius: 5px;
+    padding: 5px;
+}
