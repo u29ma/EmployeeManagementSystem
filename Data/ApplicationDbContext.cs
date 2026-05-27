@@ -17,8 +17,8 @@ namespace EmployeeManagementSystem.Data
         public DbSet<RoleModel> Roles { get; set; }
         public DbSet<LeaveManagementModel> Leaves { get; set; }
         public DbSet<LeaveTypeModel> LeaveTypes { get; set; }
-        public DbSet<PayrollModel> Payroll { get; set; }
-        public DbSet<AttendanceModel> Attendance { get; set; }
+        public DbSet<PayrollModel> Payrolls { get; set; }
+        public DbSet<AttendanceModel> Attendances { get; set; }
         public DbSet<AnnouncementModel> Announcements { get; set; }
 
     }

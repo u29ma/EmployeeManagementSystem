@@ -36,7 +36,7 @@ namespace EmployeeManagementSystem.Da
         }
         public List<PayrollReportVM> GetPayrollReport(string search)
         {
-            var query = from p in _context.Payroll
+            var query = from p in _context.Payrolls
                         join e in _context.Employees
                         on p.EmployeeId equals e.EmployeeId
 
@@ -60,7 +60,7 @@ namespace EmployeeManagementSystem.Da
         }
         public PayslipVM GetPayslip(int payrollId)
         {
-            var data = (from p in _context.Payroll
+            var data = (from p in _context.Payrolls
                         join e in _context.Employees
                         on p.EmployeeId equals e.EmployeeId
                         join d in _context.Departments
@@ -86,7 +86,7 @@ namespace EmployeeManagementSystem.Da
         }
         public List<AttendanceReportVM> GetAttendanceReport(string search, string month)
         {
-            var query = from a in _context.Attendance
+            var query = from a in _context.Attendances
                         join e in _context.Employees
                         on a.EmployeeId equals e.EmployeeId
 

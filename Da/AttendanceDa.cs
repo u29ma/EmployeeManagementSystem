@@ -18,12 +18,12 @@ namespace EmployeeManagementSystem.Da
         {
             var today = DateTime.Today;
 
-            var record = _context.Attendance
+            var record = _context.Attendances
                 .FirstOrDefault(a => a.EmployeeId == empId && a.Date == today);
 
             if (record == null)
             {
-                _context.Attendance.Add(new AttendanceModel
+                _context.Attendances.Add(new AttendanceModel
                 {
                     EmployeeId = empId,
                     Date = today,
@@ -40,7 +40,7 @@ namespace EmployeeManagementSystem.Da
         {
             var today = DateTime.Today;
 
-            var record = _context.Attendance
+            var record = _context.Attendances
                 .FirstOrDefault(a => a.EmployeeId == empId && a.Date == today);
 
             if (record != null)
@@ -53,7 +53,7 @@ namespace EmployeeManagementSystem.Da
         // 👉 Employee attendance
         public List<AttendanceModel> GetEmployeeAttendance(int empId)
         {
-            return _context.Attendance
+            return _context.Attendances
                 .Where(a => a.EmployeeId == empId)
                 .OrderByDescending(a => a.Date)
                 .ToList();
@@ -62,7 +62,7 @@ namespace EmployeeManagementSystem.Da
         // 👉 Admin view all
         public List<AttendanceModel> GetAllAttendance(string search, DateTime? date, string status)
         {
-            var query = _context.Attendance
+            var query = _context.Attendances
                 .Include(a => a.Employee)
                 .AsQueryable();
 
@@ -100,7 +100,7 @@ namespace EmployeeManagementSystem.Da
         {
             var today = DateTime.Today;
 
-            return _context.Attendance
+            return _context.Attendances
                 .Include(a => a.Employee)
                 .Where(a => a.Date == today && a.Status == "Present")
                 .ToList();

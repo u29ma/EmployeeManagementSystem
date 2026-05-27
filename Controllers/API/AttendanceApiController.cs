@@ -21,7 +21,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpGet]
         public IActionResult GetAttendance()
         {
-            var data = _context.Attendance.ToList();
+            var data = _context.Attendances.ToList();
 
             return Ok(data);
         }
@@ -31,7 +31,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpGet("{id}")]
         public IActionResult GetAttendanceById(int id)
         {
-            var attendance = _context.Attendance
+            var attendance = _context.Attendances
                 .FirstOrDefault(x => x.AttendanceId == id);
 
             if (attendance == null)
@@ -57,7 +57,7 @@ namespace EmployeeManagementSystem.Controllers.API
 
             model.Status = "Present";
 
-            _context.Attendance.Add(model);
+            _context.Attendances.Add(model);
 
             _context.SaveChanges();
 
@@ -74,7 +74,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpPut("CheckOut/{id}")]
         public IActionResult CheckOut(int id)
         {
-            var attendance = _context.Attendance
+            var attendance = _context.Attendances
                 .FirstOrDefault(x => x.AttendanceId == id);
 
             if (attendance == null)
@@ -101,7 +101,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpDelete("{id}")]
         public IActionResult DeleteAttendance(int id)
         {
-            var attendance = _context.Attendance
+            var attendance = _context.Attendances
                 .FirstOrDefault(x => x.AttendanceId == id);
 
             if (attendance == null)
@@ -112,7 +112,7 @@ namespace EmployeeManagementSystem.Controllers.API
                 });
             }
 
-            _context.Attendance.Remove(attendance);
+            _context.Attendances.Remove(attendance);
 
             _context.SaveChanges();
 

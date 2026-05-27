@@ -15,7 +15,7 @@ namespace EmployeeManagementSystem.Da
 
         public List<PayrollModel> GetPendingPayroll()
         {
-            return _context.Payroll
+            return _context.Payrolls
                 .Include(p => p.Employee)
                 .Where(p => p.Status == "Pending")
                 .ToList();
@@ -23,20 +23,20 @@ namespace EmployeeManagementSystem.Da
 
         public IQueryable<PayrollModel> GetAllPayrollQueryable()
         {
-            return _context.Payroll
+            return _context.Payrolls
                 .Include(p => p.Employee);
         }
         // 👉 Get all payroll (Admin)
         public List<PayrollModel> GetAllPayroll()
         {
-            return _context.Payroll
+            return _context.Payrolls
                 .Include(p => p.Employee)
                 .ToList();
         }
         // 👉 Insert payroll
         public bool AddPayroll(PayrollModel payroll)
         {
-            var exists = _context.Payroll.Any(p =>
+            var exists = _context.Payrolls.Any(p =>
                 p.EmployeeId == payroll.EmployeeId &&
                 p.SalaryMonth == payroll.SalaryMonth &&
                 p.SalaryYear == payroll.SalaryYear);
@@ -50,7 +50,7 @@ namespace EmployeeManagementSystem.Da
             payroll.PaymentDate = DateTime.Now;
             payroll.Status = "Pending";
 
-            _context.Payroll.Add(payroll);
+            _context.Payrolls.Add(payroll);
             _context.SaveChanges();
 
             return true;
@@ -59,7 +59,7 @@ namespace EmployeeManagementSystem.Da
         // 👉 Approve payroll
         public void ApprovePayroll(int id)
         {
-            var data = _context.Payroll.Find(id);
+            var data = _context.Payrolls.Find(id);
             if (data != null)
             {
                 data.Status = "Paid";
@@ -68,7 +68,7 @@ namespace EmployeeManagementSystem.Da
         }
         public void HoldPayroll(int id)
         {
-            var data = _context.Payroll.Find(id);
+            var data = _context.Payrolls.Find(id);
 
             if (data != null)
             {
@@ -80,7 +80,7 @@ namespace EmployeeManagementSystem.Da
         // 👉 Get employee payroll
         public List<PayrollModel> GetPayrollByEmployee(int empId, string month, string status)
         {
-            var query = _context.Payroll
+            var query = _context.Payrolls
                 .Where(p => p.EmployeeId == empId);
 
             // 📅 Month filter (ONLY if selected)

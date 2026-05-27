@@ -69,7 +69,7 @@ namespace EmployeeManagementSystem.Controllers
                 HttpContext.Session.SetString("Role", roleName);
                 HttpContext.Session.SetString("UserId", user.UserId.ToString());
                 HttpContext.Session.SetString("UserName", user.Username);
-                HttpContext.Session.SetString("EmployeeId", user.EmployeeId.ToString());
+                //HttpContext.Session.SetString("EmployeeId", user.EmployeeId.ToString());
 
                 if (employee != null)
                 {

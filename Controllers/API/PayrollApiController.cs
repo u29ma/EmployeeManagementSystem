@@ -21,7 +21,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpGet]
         public IActionResult GetPayrolls()
         {
-            var payrolls = from p in _context.Payroll
+            var payrolls = from p in _context.Payrolls
                            join e in _context.Employees
                            on p.EmployeeId equals e.EmployeeId
 
@@ -50,7 +50,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpGet("{id}")]
         public IActionResult GetPayrollById(int id)
         {
-            var payroll = _context.Payroll
+            var payroll = _context.Payrolls
                 .FirstOrDefault(x => x.PayrollId == id);
 
             if (payroll == null)
@@ -72,7 +72,7 @@ namespace EmployeeManagementSystem.Controllers.API
         {
             model.Status = "Pending";
 
-            _context.Payroll.Add(model);
+            _context.Payrolls.Add(model);
 
             _context.SaveChanges();
 
@@ -105,7 +105,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpPut("Approve/{id}")]
         public IActionResult ApprovePayroll(int id)
         {
-            var payroll = _context.Payroll
+            var payroll = _context.Payrolls
                 .FirstOrDefault(x => x.PayrollId == id);
 
             if (payroll == null)
@@ -132,7 +132,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpPut("Hold/{id}")]
         public IActionResult HoldPayroll(int id)
         {
-            var payroll = _context.Payroll
+            var payroll = _context.Payrolls
                 .FirstOrDefault(x => x.PayrollId == id);
 
             if (payroll == null)
@@ -159,7 +159,7 @@ namespace EmployeeManagementSystem.Controllers.API
         [HttpDelete("{id}")]
         public IActionResult DeletePayroll(int id)
         {
-            var payroll = _context.Payroll
+            var payroll = _context.Payrolls
                 .FirstOrDefault(x => x.PayrollId == id);
 
             if (payroll == null)
@@ -170,7 +170,7 @@ namespace EmployeeManagementSystem.Controllers.API
                 });
             }
 
-            _context.Payroll.Remove(payroll);
+            _context.Payrolls.Remove(payroll);
 
             _context.SaveChanges();
 

@@ -226,13 +226,13 @@ namespace EmployeeManagementSystem.Da
             var employee = _context.Employees
                 .FirstOrDefault(x => x.EmployeeId == id);
 
-            var presentDays = _context.Attendance
+            var presentDays = _context.Attendances
                 .Count(x => x.EmployeeId == id && x.Status == "Present");
 
             var totalLeaves = _context.Leaves
                 .Count(x => x.EmployeeId == id);
 
-            var payrollGenerated = _context.Payroll
+            var payrollGenerated = _context.Payrolls
                 .Count(x => x.EmployeeId == id);
 
             return new ProfileViewModel

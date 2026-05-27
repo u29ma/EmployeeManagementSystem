@@ -87,7 +87,7 @@ namespace EmployeeManagementSystem.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Attendance");
+                    b.ToTable("Attendances");
                 });
 
             modelBuilder.Entity("EmployeeManagementSystem.Models.DepartmentModel", b =>
@@ -110,6 +110,28 @@ namespace EmployeeManagementSystem.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("EmployeeManagementSystem.Models.DesignationModel", b =>
+                {
+                    b.Property<int>("DesignationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DesignationId"));
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DesignationName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DesignationId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Designations");
+                });
+
             modelBuilder.Entity("EmployeeManagementSystem.Models.EmployeeModel", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -119,7 +141,6 @@ namespace EmployeeManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DOB")
@@ -128,9 +149,8 @@ namespace EmployeeManagementSystem.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Designation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DesignationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -140,10 +160,9 @@ namespace EmployeeManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsProfileComplete")
+                    b.Property<bool?>("IsProfileComplete")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("JoiningDate")
@@ -157,19 +176,25 @@ namespace EmployeeManagementSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("Status")
+                    b.Property<bool?>("Status")
                         .HasColumnType("bit");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Employees");
                 });
@@ -256,13 +281,15 @@ namespace EmployeeManagementSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("NetSalary")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("SalaryMonth")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("SalaryMonth")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SalaryYear")
                         .HasColumnType("int");
@@ -276,6 +303,23 @@ namespace EmployeeManagementSystem.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Payroll");
+                });
+
+            modelBuilder.Entity("EmployeeManagementSystem.Models.RoleModel", b =>
+                {
+                    b.Property<int>("RoleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("EmployeeManagementSystem.Models.UserModel", b =>
@@ -319,6 +363,36 @@ namespace EmployeeManagementSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("EmployeeManagementSystem.Models.DesignationModel", b =>
+                {
+                    b.HasOne("EmployeeManagementSystem.Models.DepartmentModel", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("EmployeeManagementSystem.Models.EmployeeModel", b =>
+                {
+                    b.HasOne("EmployeeManagementSystem.Models.DesignationModel", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmployeeManagementSystem.Models.RoleModel", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Designation");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EmployeeManagementSystem.Models.LeaveManagementModel", b =>
