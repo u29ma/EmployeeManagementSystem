@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmployeeManagementSystem.Models;
 
-[Table("Payroll")]
+
 public class PayrollModel
 {
     [Key]

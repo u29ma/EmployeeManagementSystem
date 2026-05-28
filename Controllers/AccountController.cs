@@ -40,7 +40,7 @@ namespace EmployeeManagementSystem.Controllers
             }
 
             // 🔹 Get Employee
-            var employee = _da.GetEmployeeByUserId(user.UserId);
+            var employee = _da.GetEmployeeByEmployeeId(user.EmployeeId);
 
             // ❌ Employee not found
             if (employee == null)
@@ -55,12 +55,24 @@ namespace EmployeeManagementSystem.Controllers
                 ViewBag.Error = "Account is inactive";
                 return View(model);
             }
+            // 3️⃣ Get RoleId safely (IMPORTANT FIX)
+            int roleId = employee.RoleId;
+            if (roleId == 0)
+            {
+                ViewBag.Error = "Role not assigned to employee";
+                return View(model);
+            }
+            // 4️⃣ Get Role Name
+            string roleName = _da.GetRoleName(roleId);
+
+            if (string.IsNullOrEmpty(roleName))
+            {
+                roleName = "Employee";
+            }
+
             // 🔥 Get Role Name from Roles Table
-            string roleName = _da.GetRoleName(employee.RoleId);
-            //if (string.IsNullOrEmpty(roleName))
-            //{
-            //    roleName = "Employee";
-            //}
+            //string roleName = _da.GetRoleName(employee.RoleId);
+            //string roleName = _da.GetRoleName(employee.RoleId) ?? "Unknown";
 
             if (user != null)
             {
@@ -141,7 +153,7 @@ namespace EmployeeManagementSystem.Controllers
             {
                 return View(model);
             }
-            var user = _da.GetByEmail(model.Email);
+            var user = _da.GetEmail(model.Email);
 
             if (user != null)
             {
@@ -154,6 +166,7 @@ namespace EmployeeManagementSystem.Controllers
 
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Logout()

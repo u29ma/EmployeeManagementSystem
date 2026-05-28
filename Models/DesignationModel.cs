@@ -11,11 +11,5 @@ namespace EmployeeManagementSystem.Models
         [Required]
         public string DesignationName { get; set; }
 
-        // Foreign Key
-        public int DepartmentId { get; set; }
-
-        // Navigation Property
-        [ForeignKey("DepartmentId")]
-        public DepartmentModel Department { get; set; }
     }
 }

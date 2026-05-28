@@ -35,6 +35,8 @@ namespace EmployeeManagementSystem.Controllers
         public IActionResult AddEmployee()
         {
             ViewBag.Departments = _employeeDa.GetDepartments();
+            ViewBag.Designations = _employeeDa.GetDesignations();
+            ViewBag.Roles = _employeeDa.GetRoles();
             return View();
         }
         // 🔹 POST: Save Employee
@@ -58,22 +60,20 @@ namespace EmployeeManagementSystem.Controllers
             }
             // 🔥 Reload dropdown if error occurs
             ViewBag.Departments = _employeeDa.GetDepartments();
+            ViewBag.Roles = _employeeDa.GetRoles();
+            ViewBag.Designations = _employeeDa.GetDesignations();
 
             return View(emp);
           
         }
-        //public IActionResult EmployeeList()
-        //{
-        //    var employees = _employeeDa.GetAllEmployees();  // ✅ Call Da
-        //    return View(employees);
-        //}
-
+      
         // GET
         [HttpGet]
         public IActionResult EditEmployee(int id)
         {
             var emp = _employeeDa.GetEmployeeById(id);
             ViewBag.Departments = new SelectList(_employeeDa.GetDepartments(), "DepartmentId", "DepartmentName", emp.DepartmentId);
+            ViewBag.Designations = new SelectList(_employeeDa.GetDesignations(), "DesignationId", "DesignationName", emp.DesignationId);
 
             if (emp == null)
             {
@@ -171,18 +171,5 @@ namespace EmployeeManagementSystem.Controllers
 
             //return View(employee);
         }
-        public JsonResult GetDesignationsByDepartment(int departmentId)
-        {
-            var designations = _employeeDa.GetDesignationsByDepartment(departmentId);
-
-            var result = designations.Select(d => new
-            {
-                designationId = d.DesignationId,
-                designationName = d.DesignationName
-            });
-
-            return Json(result);
-        }
-
     }
 }

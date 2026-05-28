@@ -22,28 +22,31 @@ namespace EmployeeManagementSystem.Da
 
         public string GetRoleName(int roleId)
         {
-       //     var role = _context.Roles
-       //.FromSqlRaw("SELECT RoleId, RoleName FROM Roles WHERE RoleId = {0}", roleId)
-       //.FirstOrDefault();
-
-       //     return role?.RoleName;
             return _context.Roles.Where(r => r.RoleId == roleId).Select(r => r.RoleName).FirstOrDefault();
         }
 
-        public EmployeeModel GetEmployeeByUserId(int userId)
+        public EmployeeModel GetEmployeeByEmployeeId(int employeeId)
         {
             var data = (from e in _context.Employees
                         join d in _context.Departments
                         on e.DepartmentId equals d.DepartmentId
-                        where e.UserId == userId
+                        join des in _context.Designations
+                        on e.DesignationId equals des.DesignationId
+                        join r in _context.Roles on e.RoleId equals r.RoleId
+
+                        where e.EmployeeId == employeeId
+
                         select new EmployeeModel
                         {
                             EmployeeId = e.EmployeeId,
-                            UserId = e.UserId,
+                            RoleId = r.RoleId,
+                            RoleName = r.RoleName,
                             FirstName = e.FirstName,
                             LastName = e.LastName,
                             DepartmentId = e.DepartmentId,
-                            DepartmentName = d.DepartmentName, 
+                            DepartmentName = d.DepartmentName,
+                            DesignationId = e.DesignationId,
+                            DesignationName = des.DesignationName,
                             Salary = e.Salary,
                             IsProfileComplete = e.IsProfileComplete,
                             Status = e.Status
@@ -68,7 +71,6 @@ namespace EmployeeManagementSystem.Da
                 Username = model.Name,
                 Email = model.Email,
                 Password = model.Password,
-                Role = "Employee"
             };
 
             _context.Users.Add(user);
@@ -77,8 +79,6 @@ namespace EmployeeManagementSystem.Da
             // ✅ Save Employee
             var employee = new EmployeeModel
             {
-                UserId = user.UserId,
-                Email = user.Email,
                 Status = true, // ✅ Active
                 IsProfileComplete = false
             };
@@ -89,46 +89,42 @@ namespace EmployeeManagementSystem.Da
             return true;
         }
 
-        public EmployeeModel GetByEmail(string email)
+        public string GetEmail(string email)
         {
-            return _context.Employees
-                .FirstOrDefault(e => e.Email == email);
+            return _context.Users.Where(u => u.Email == email).Select(u => u.Email).FirstOrDefault();
         }
-        public bool ChangePassword(int employeeId, string currentPassword, string newPassword)
+        public string GetEmailByEmployeeId(int employeeId)
         {
-            var user = _context.Employees
-                .FirstOrDefault(x => x.EmployeeId == employeeId);
+            return _context.Users
+                .Where(u => u.EmployeeId == employeeId)
+                .Select(u => u.Email)
+                .FirstOrDefault();
+        }
+        public bool ChangePassword(int userId, string currentPassword, string newPassword)
+        {
+            var user = _context.Users
+                .FirstOrDefault(x => x.UserId == userId);
 
             if (user == null)
-            {
                 return false;
-            }
 
-            // Check current password
             if (user.Password != currentPassword)
-            {
                 return false;
-            }
 
-            // Update password
             user.Password = newPassword;
-
             _context.SaveChanges();
 
             return true;
         }
         public bool ResetPassword(string email, string newPassword)
         {
-            var user = _context.Employees
+            var user = _context.Users
                 .FirstOrDefault(x => x.Email == email);
 
             if (user == null)
-            {
                 return false;
-            }
 
             user.Password = newPassword;
-
             _context.SaveChanges();
 
             return true;

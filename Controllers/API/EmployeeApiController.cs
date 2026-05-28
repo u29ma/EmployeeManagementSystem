@@ -85,9 +85,8 @@ namespace EmployeeManagementSystem.Controllers.API
 
             employee.FirstName = model.FirstName;
             employee.LastName = model.LastName;
-            employee.Email = model.Email;
             employee.Phone = model.Phone;
-            employee.Designation = model.Designation;
+            employee.DesignationId = model.DesignationId;
 
             _context.SaveChanges();
 

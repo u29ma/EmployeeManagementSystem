@@ -72,11 +72,11 @@ namespace EmployeeManagementSystem.Da
             {
                 throw new Exception("Email already exists");
             }
-            // ✅ Get Role Name from RoleId
-            var roleName = _context.Roles
-                .Where(r => r.RoleId == emp.RoleId)
-                .Select(r => r.RoleName)
-                .FirstOrDefault();
+
+            // ✅ Save Employee first
+            emp.Status = true;
+            _context.Employees.Add(emp);
+            _context.SaveChanges();
 
             // Step 1: Create User
             var user = new UserModel
@@ -84,29 +84,16 @@ namespace EmployeeManagementSystem.Da
                 Email = email,
                 Password = password,
                 Username = emp.FirstName + " " + emp.LastName,
-                Role = roleName
+                EmployeeId = emp.EmployeeId,
+                IsActive = true,
+                CreatedAt = DateTime.Now
             };
             _context.Users.Add(user);
-            _context.SaveChanges(); // 🔥 Important to get UserId
-
-            // Step 2: Link Employee with User
-            emp.UserId = user.UserId;
-            emp.Status = true;   // ✅ Active
-            _context.Employees.Add(emp);
-            _context.SaveChanges(); // 🔥 gives EmployeeId
-
-            // ✅ Step 4: UPDATE User with EmployeeId 
-            user.EmployeeId = emp.EmployeeId;
-            _context.Users.Update(user);
-            _context.SaveChanges();
-
+            _context.SaveChanges(); 
         }
-
-        public List<DesignationModel> GetDesignationsByDepartment(int departmentId)
+        public List<RoleModel> GetRoles()
         {
-            return _context.Designations
-                .Where(d => d.DepartmentId == departmentId)
-                .ToList();
+            return _context.Roles.ToList();
         }
 
         // Get by Id
@@ -127,17 +114,17 @@ namespace EmployeeManagementSystem.Da
                 existingEmp.Phone = emp.Phone;
                 existingEmp.Address = emp.Address;
                 existingEmp.DepartmentId = emp.DepartmentId;
-                existingEmp.Designation = emp.Designation;
+                existingEmp.DesignationId = emp.DesignationId;
                 existingEmp.Salary = emp.Salary;
                 existingEmp.Status = emp.Status;
 
-                var user = _context.Users.Find(emp.UserId);
+                //var user = _context.Users.Find(emp.UserId);
 
 
-                if (user != null)
-                {
-                    user.Username = emp.FirstName + " " + emp.LastName;
-                }
+                //if (user != null)
+                //{
+                //    user.Username = emp.FirstName + " " + emp.LastName;
+                //}
 
                 _context.SaveChanges();
             }
@@ -152,7 +139,7 @@ namespace EmployeeManagementSystem.Da
                 emp.LastName = model.LastName;
                 emp.Phone = model.Phone;
                 emp.DepartmentId = model.DepartmentId;
-                emp.Designation = model.Designation;
+                emp.DesignationId = model.DesignationId;
                 emp.Salary = model.Salary;
                 emp.IsProfileComplete = true;
 
@@ -198,6 +185,10 @@ namespace EmployeeManagementSystem.Da
         public List<DepartmentModel> GetDepartments()
         {
             return _context.Departments.ToList();
+        }
+        public List<DesignationModel> GetDesignations()
+        {
+            return _context.Designations.ToList();
         }
 
         public List<EmployeeModel> GetAllEmployees()

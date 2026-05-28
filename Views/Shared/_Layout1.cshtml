@@ -34,7 +34,17 @@
            
             <div class="auth-buttons">
                 @* <a href="/Employee/Create" class="btn btn-warning text-white">+ Add New Employee</a> *@
-                <a href="/Account/Logout" class="btn btn-danger text-white">Logout</a>
+                @* <a href="/Account/Logout" class="btn btn-danger text-white">Logout</a> *@
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                              
+                    <button type="submit" class="btn btn-danger text-white">
+
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Logout
+
+                    </button>
+
+                </form>
                 <!-- Notification -->
                 <div class="icon-btn">
                     <i class="fas fa-bell"></i>
@@ -93,7 +103,7 @@
 
                         <li>
                             <form asp-controller="Account"  asp-action="Logout" method="post">
-
+                              
                                 <button type="submit" class="dropdown-item text-danger border-0 bg-transparent">
 
                                     <i class="fas fa-sign-out-alt me-2"></i>
