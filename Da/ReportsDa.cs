@@ -73,6 +73,7 @@ namespace EmployeeManagementSystem.Da
 
                         select new PayslipVM
                         {
+                            PayrollId = p.PayrollId,
                             EmployeeName = e.FirstName + " " + e.LastName,
                             Department = d.DepartmentName,
                             Designation =des.DesignationName,

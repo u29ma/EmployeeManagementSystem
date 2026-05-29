@@ -207,13 +207,81 @@ namespace EmployeeManagementSystem.Controllers
                     "PayrollReport.pdf");
             }
         }
+
+        //----------------------------------------------------------------------------------
         public IActionResult Payslip(int payrollId)
         {
             var data = _reportsDa.GetPayslip(payrollId);
 
             return View(data);
         }
-       
+        public IActionResult ExportPayslipPdf(int payrollId)
+        {
+            var model = _reportsDa.GetPayslip(payrollId);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                document.Add(new Paragraph("ABC Company Pvt Ltd")
+                    .SetBold()
+                    .SetFontSize(18)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Employee Payslip")
+                    .SetFontSize(14)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph($"Salary Month: {model.Month}")
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("\n"));
+
+                Table empTable = new Table(2).UseAllAvailableWidth();
+
+                empTable.AddCell("Employee");
+                empTable.AddCell(model.EmployeeName);
+
+                empTable.AddCell("Department");
+                empTable.AddCell(model.Department);
+
+                empTable.AddCell("Designation");
+                empTable.AddCell(model.Designation);
+
+                empTable.AddCell("Payment Date");
+                empTable.AddCell(model.PaymentDate.ToShortDateString());
+
+                document.Add(empTable);
+
+                document.Add(new Paragraph("\n"));
+
+                Table salaryTable = new Table(2).UseAllAvailableWidth();
+
+                salaryTable.AddCell("Basic Salary");
+                salaryTable.AddCell($"₹ {model.BasicSalary:N2}");
+
+                salaryTable.AddCell("Bonus");
+                salaryTable.AddCell($"₹ {model.Bonus:N2}");
+
+                salaryTable.AddCell("Deduction");
+                salaryTable.AddCell($"₹ {model.Deduction:N2}");
+
+                salaryTable.AddCell("Net Salary");
+                salaryTable.AddCell($"₹ {model.NetSalary:N2}");
+
+                document.Add(salaryTable);
+
+                document.Close();
+
+                return File(
+                    ms.ToArray(),
+                    "application/pdf",
+                    $"Payslip_{model.EmployeeName}.pdf");
+            }
+        }
+
         //-----------------------------------------------------------------------------
         public IActionResult AttendanceReport(string search, string month)
         {

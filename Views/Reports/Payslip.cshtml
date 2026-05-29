@@ -119,6 +119,11 @@
     </div>
 
     <div class="mt-4 text-end">
+        <a asp-action="ExportPayslipPdf"
+               asp-route-payrollId="@Model.PayrollId"
+               class="btn btn-success">
+            Download PDF
+        </a>
         <button class="btn btn-primary"
                 onclick="window.print()">
             Print Payslip
