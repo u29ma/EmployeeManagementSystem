@@ -119,14 +119,103 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(data);
         }
+        public IActionResult PayrollReportPdf(string search)
+        {
+            var data = _reportsDa.GetPayrollReport(search);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // Margins
+                document.SetMargins(60, 20, 50, 20);
+
+                // ================= HEADER =================
+                document.Add(new Paragraph("ABC Company Pvt Ltd")
+                    .SetBold()
+                    .SetFontSize(16)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Payroll Report")
+                    .SetFontSize(13)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Generated On: " +
+                    DateTime.Now.ToString("dd-MM-yyyy"))
+                    .SetTextAlignment(TextAlignment.RIGHT));
+
+                document.Add(new Paragraph("\n"));
+
+                // ================= TABLE =================
+                float[] columnWidths =
+                    { 150, 100, 80, 100, 100, 120 };
+
+                Table table = new Table(columnWidths);
+
+                // Headers
+                table.AddHeaderCell("Employee");
+                table.AddHeaderCell("Month");
+                table.AddHeaderCell("Year");
+                table.AddHeaderCell("Salary");
+                table.AddHeaderCell("Status");
+                table.AddHeaderCell("Generated Date");
+
+                // Data
+                foreach (var item in data)
+                {
+                    table.AddCell(item.EmployeeName);
+                    table.AddCell(item.SalaryMonth);
+                    table.AddCell(item.SalaryYear.ToString());
+                    table.AddCell("₹ " + item.NetSalary);
+                    table.AddCell(item.Status);
+                    table.AddCell(DateTime.Now.ToShortDateString());
+                }
+
+                document.Add(table);
+
+                // ================= FOOTER =================
+                int totalPages = pdf.GetNumberOfPages();
+
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    PdfPage page = pdf.GetPage(i);
+
+                    Rectangle pageSize = page.GetPageSize();
+
+                    PdfCanvas pdfCanvas =
+                        new PdfCanvas(page.NewContentStreamAfter(),
+                        page.GetResources(),
+                        pdf);
+
+                    Canvas canvas = new Canvas(pdfCanvas, pageSize);
+
+                    canvas.ShowTextAligned(
+                        new Paragraph("Page " + i),
+                        pageSize.GetWidth() / 2,
+                        20,
+                        TextAlignment.CENTER);
+
+                    canvas.Close();
+                }
+
+                document.Close();
+
+                return File(ms.ToArray(),
+                    "application/pdf",
+                    "PayrollReport.pdf");
+            }
+        }
         public IActionResult Payslip(int payrollId)
         {
             var data = _reportsDa.GetPayslip(payrollId);
 
             return View(data);
         }
-
-        public IActionResult AttendanceReport( string search, string month)
+       
+        //-----------------------------------------------------------------------------
+        public IActionResult AttendanceReport(string search, string month)
         {
             var data = _reportsDa
                 .GetAttendanceReport(search, month);
@@ -136,5 +225,100 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(data);
         }
+        public IActionResult AttendanceReportPdf(string search, string month)
+        {
+            var data = _reportsDa.GetAttendanceReport(search, month);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // Margins
+                document.SetMargins(60, 20, 50, 20);
+
+                // ================= HEADER =================
+                document.Add(new Paragraph("ABC Company Pvt Ltd")
+                    .SetBold()
+                    .SetFontSize(16)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Attendance Report")
+                    .SetFontSize(13)
+                    .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Generated On: " +
+                    DateTime.Now.ToString("dd-MM-yyyy"))
+                    .SetTextAlignment(TextAlignment.RIGHT));
+
+                document.Add(new Paragraph("\n"));
+
+                // ================= TABLE =================
+                float[] columnWidths =
+                    { 150, 100, 100, 100, 100 };
+
+                Table table = new Table(columnWidths);
+
+                // Headers
+                table.AddHeaderCell("Employee");
+                table.AddHeaderCell("Date");
+                table.AddHeaderCell("Check In");
+                table.AddHeaderCell("Check Out");
+                table.AddHeaderCell("Status");
+
+                // Data
+                foreach (var item in data)
+                {
+                    table.AddCell(item.EmployeeName ?? "-");
+
+                    table.AddCell(
+                        item.Date.ToShortDateString());
+
+                    table.AddCell(
+                        item.CheckIn.ToString());
+
+                    table.AddCell(
+                        item.CheckOut?.ToString() ?? "-");
+
+                    table.AddCell(item.Status ?? "-");
+                }
+
+                document.Add(table);
+
+                // ================= FOOTER =================
+                int totalPages = pdf.GetNumberOfPages();
+
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    PdfPage page = pdf.GetPage(i);
+
+                    Rectangle pageSize = page.GetPageSize();
+
+                    PdfCanvas pdfCanvas =
+                        new PdfCanvas(page.NewContentStreamAfter(),
+                        page.GetResources(),
+                        pdf);
+
+                    Canvas canvas = new Canvas(pdfCanvas, pageSize);
+
+                    canvas.ShowTextAligned(
+                        new Paragraph("Page " + i),
+                        pageSize.GetWidth() / 2,
+                        20,
+                        TextAlignment.CENTER);
+
+                    canvas.Close();
+                }
+
+                document.Close();
+
+                return File(ms.ToArray(),
+                    "application/pdf",
+                    "AttendanceReport.pdf");
+            }
+        }
+       
     }
 }
+    

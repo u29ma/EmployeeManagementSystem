@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    ViewData["Title"] = "Leave Balance";
+}
+
+<div class="container mt-4">
+
+    <h2 class="text-center text-primary mb-4">
+        Leave Balance
+    </h2>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5>Total Leaves</h5>
+
+                <h3 class="text-primary">
+                    @ViewBag.TotalLeave
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5>Used Leaves</h5>
+
+                <h3 class="text-danger">
+                    @ViewBag.UsedLeave
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow text-center p-3">
+                <h5>Remaining Leaves</h5>
+
+                <h3 class="text-success">
+                    @ViewBag.RemainingLeave
+                </h3>
+            </div>
+        </div>
+
+    </div>
+
+</div>

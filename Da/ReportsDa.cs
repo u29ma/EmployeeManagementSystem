@@ -48,7 +48,9 @@ namespace EmployeeManagementSystem.Da
                             Bonus = p.Bonus,
                             Deduction = p.Deductions,
                             NetSalary = p.BasicSalary + p.Bonus - p.Deductions,
-                            Month = p.SalaryMonth
+                            SalaryMonth = p.SalaryMonth,
+                            SalaryYear = p.SalaryYear,
+                            Status = p.Status
                         };
 
             if (!string.IsNullOrEmpty(search))
@@ -95,8 +97,8 @@ namespace EmployeeManagementSystem.Da
                             AttendanceId = a.AttendanceId,
                             EmployeeName = e.FirstName + " " + e.LastName,
                             Date = a.Date,
-                            CheckInTime = a.CheckIn,
-                            CheckOutTime = a.CheckOut,
+                            CheckIn = a.CheckIn,
+                            CheckOut = a.CheckOut,
                             Status = a.Status
                         };
 

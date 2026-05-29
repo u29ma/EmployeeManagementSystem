@@ -26,7 +26,7 @@ public class PayrollModel
     public string SalaryMonth { get; set; }
 
     [Required]
-    public int? SalaryYear { get; set; }
+    public int SalaryYear { get; set; }
     public DateTime PaymentDate { get; set; }
 }
 

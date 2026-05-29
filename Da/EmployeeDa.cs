@@ -141,7 +141,6 @@ namespace EmployeeManagementSystem.Da
                 emp.DepartmentId = model.DepartmentId;
                 emp.DesignationId = model.DesignationId;
                 emp.Salary = model.Salary;
-                emp.IsProfileComplete = true;
 
                 _context.SaveChanges();
             }
@@ -173,7 +172,6 @@ namespace EmployeeManagementSystem.Da
                             LastName = e.LastName,
                             DepartmentId = e.DepartmentId,
                             DepartmentName = d.DepartmentName,
-                            IsProfileComplete = e.IsProfileComplete,
                             Salary = e.Salary,
                             Status = e.Status
                         }).FirstOrDefault();
@@ -209,30 +207,45 @@ namespace EmployeeManagementSystem.Da
         }
         public EmployeeModel GetEmployeesById(int id)
         {
-            return _context.Employees
-                .FirstOrDefault(x => x.EmployeeId == id);
+            return _context.Employees.FirstOrDefault(x => x.EmployeeId == id);
         }
         public ProfileViewModel GetEmployeeProfile(int id)
         {
-            var employee = _context.Employees
-                .FirstOrDefault(x => x.EmployeeId == id);
+            var data = (from e in _context.Employees
+                        join u in _context.Users
+                        on e.EmployeeId equals u.EmployeeId
+                        join d in _context.Departments
+                        on e.DepartmentId equals d.DepartmentId
+                        join des in _context.Designations
+                        on e.DesignationId equals des.DesignationId
+                        where e.EmployeeId == id
 
-            var presentDays = _context.Attendances
-                .Count(x => x.EmployeeId == id && x.Status == "Present");
+                        select new ProfileViewModel
+                        {
+                            Email = u.Email,
+                            PresentDays = _context.Attendances.Count(x => x.EmployeeId == id && x.Status == "Present"),
+                            TotalLeaves = _context.Leaves.Count(x => x.EmployeeId == id),
+                            PayrollGenerated = _context.Payrolls.Count(x => x.EmployeeId == id),
 
-            var totalLeaves = _context.Leaves
-                .Count(x => x.EmployeeId == id);
+                            Employee = new EmployeeModel
+                            {
+                                EmployeeId = e.EmployeeId,
+                                FirstName = e.FirstName,
+                                LastName = e.LastName,
+                                Phone = e.Phone,
+                                JoiningDate = e.JoiningDate,
+                                Status = e.Status,
 
-            var payrollGenerated = _context.Payrolls
-                .Count(x => x.EmployeeId == id);
+                                DepartmentId = e.DepartmentId,
+                                DesignationId = e.DesignationId,
+                                RoleId = e.RoleId,
 
-            return new ProfileViewModel
-            {
-                Employee = employee,
-                PresentDays = presentDays,
-                TotalLeaves = totalLeaves,
-                PayrollGenerated = payrollGenerated
-            };
+                                DepartmentName = d.DepartmentName,
+                                DesignationName = des.DesignationName
+                            }
+                        }).FirstOrDefault();
+
+            return data;
         }
     }
 }

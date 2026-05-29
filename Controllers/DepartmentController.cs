@@ -53,7 +53,7 @@ namespace EmployeeManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 _departmentDa.UpdateDepartment(dept);
-                return RedirectToAction("DepartmentList");
+                return RedirectToAction("Index");
             }
             return View(dept);
         }
@@ -70,7 +70,7 @@ namespace EmployeeManagementSystem.Controllers
                 TempData["Error"] = ex.Message;
             }
 
-            return RedirectToAction("DepartmentList");
+            return RedirectToAction("Index");
         }
     }
 }

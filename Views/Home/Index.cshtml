@@ -1,318 +1,164 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-<style>
-    /* Import modern font */
-    @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-    body {
-        margin: 0;
-        font-family: 'Poppins', sans-serif;
-    }
+<link rel="stylesheet" href="~/css/home.css"/>
 
-    /* HERO SECTION */
-    .hero {
-        position: relative;
-        height: 60vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        overflow: hidden;
-    }
+<!-- HERO SECTION -->
 
-        /* Background image + blur */
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: url('/images/h1.jfif') no-repeat center/cover;
-            background-size: cover;
-            filter: blur(3px) brightness(0.7);
-            transform: scale(1.05);
-            z-index: 0;
-        }
-       
-        .hero::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient( rgba(0,0,0,0.6), rgba(0,0,0,0.4) );
-            z-index: 1;
-        }
-
-    /* Content */
-    /* .hero-content {
-        position: relative;
-        z-index: 2;
-        text-align: center;
-        max-width: 600px;
-        padding: 30px;
-        /* Glass effect 
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        border-radius: 20px;
-    } */
-    .hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    max-width: 600px;
-    padding: 40px;
-
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(15px);
-
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-}
-
-
-    /* Heading */
-    .hero h1 {
-        font-size: 42px;
-        margin-bottom: 15px;
-    }
-
-    /* Paragraph */
-    .hero p {
-        color: #ddd;
-        margin-bottom: 25px;
-    }
-
-    /* Buttons */
-    .buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        height: 45px;
-    }
-
-    /* Primary button */
-    .btn-primary {
-        background: linear-gradient(to right, orange, gold);
-        padding: 12px 25px;
-        border-radius: 10px;
-        color: white;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-        }
-
-    /* Secondary button */
-    .btn-secondary {
-        border: 2px solid white;
-        padding: 12px 25px;
-        border-radius: 10px;
-        background: linear-gradient(to right, wheat);
-        color: crimson;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-        .btn-secondary:hover {
-            color: crimson;
-            transform: scale(1.05);
-        }
-
-    /* FEATURES */
-    .features {
-        padding: 50px 0;
-        background: #fff;
-    }
-
-    .container {
-        width: 85%;
-        margin: auto;
-    }
-
-    .features .container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 30px;
-    }
-
-    .feature-box {
-        display: flex;
-        gap: 15px;
-        align-items: flex-start;
-    }
-
-        .feature-box .icon {
-            background: orange;
-            color: #fff;
-            font-size: 20px;
-            padding: 12px;
-            border-radius: 6px;
-        }
-
-        .feature-box h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .feature-box p {
-            margin: 5px 0 0;
-            color: #666;
-        }
-
-
-    /* FOOTER */
-    .footer {
-        background: #f5f5f5;
-        padding: 40px 0 10px;
-        margin-top: 40px;
-    }
-
-    .footer-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-    }
-
-    .footer h4 {
-        margin-bottom: 10px;
-    }
-
-    .footer ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        .footer ul li {
-            margin-bottom: 8px;
-            color: #555;
-            cursor: pointer;
-        }
-
-            .footer ul li:hover {
-                color: orange;
-            }
-
-    .footer-bottom {
-        text-align: center;
-        padding-top: 15px;
-        border-top: 1px solid #ddd;
-        margin-top: 20px;
-        font-size: 14px;
-        color: #777;
-    }
-
-</style>
 <div class="hero">
 
     <div class="hero-content">
-        <h2>Manage Your Team</h2>
 
-        <h2 style="color: orange; margin-bottom: 15px;">
+        <h2>Manage Your Workforce</h2>
+
+        <h1 style="color: orange;">
             Efficiently & Seamlessly
-        </h2>
+        </h1>
 
         <p>
-            The all-in-one platform to streamline your HR processes,
-            from payroll and attendance to leave management.
+            Simplify employee management, attendance, payroll,
+            and leave tracking in one centralized platform.
         </p>
 
         <div class="buttons">
-            <a href="/Account/Register" class="btn-primary">Get Started</a>
-
-            @if (Context.Session.GetString("UserId") == null)
-            {
-                <a href="/Account/Login" class="btn-secondary">Login</a>
-            }
+            <a href="/Account/Login" class="btn-login">
+               Login
+            </a>
         </div>
+
     </div>
 
 </div>
 
 
 <!-- FEATURES SECTION -->
+
 <section class="features">
-    <div style="text-align:center; margin-bottom:30px;">
-        <h3 style="color: orange;">Our Features</h3>
+
+    <div class="features-header">
+
+        <h3>Our Features</h3>
+
         <h2>A better way to manage your workforce</h2>
-        <p style="color:#666;">
-            Everything you need to run your HR operations smoothly and efficiently, all in one place.
+
+        <p>
+            Everything you need to run your HR operations smoothly
+            and efficiently, all in one place.
         </p>
+
     </div>
+
     <div class="container">
 
         <div class="feature-box">
+
             <div class="icon">👥</div>
+
             <div>
                 <h3>Employee Management</h3>
-                <p>Keep employee records organized. Manage profiles, roles, and departments easily.</p>
+
+                <p>
+                    Keep employee records organized. Manage profiles,
+                    roles, and departments efficiently.
+                </p>
             </div>
+
         </div>
 
         <div class="feature-box">
+
             <div class="icon">📄</div>
+
             <div>
                 <h3>Leave Management</h3>
-                <p>Automate leave requests and approvals. Track balances and availability.</p>
+
+                <p>
+                    Automate leave requests and approvals while
+                    tracking leave balances easily.
+                </p>
             </div>
+
         </div>
 
         <div class="feature-box">
+
             <div class="icon">💰</div>
+
             <div>
                 <h3>Payroll Processing</h3>
-                <p>Automate salary calculations and generate payslips easily.</p>
+
+                <p>
+                    Automate salary calculations and generate
+                    payslips quickly and accurately.
+                </p>
             </div>
+
         </div>
 
         <div class="feature-box">
+
             <div class="icon">⏱</div>
+
             <div>
                 <h3>Attendance Tracking</h3>
-                <p>Monitor employee attendance with clock-in and clock-out system.</p>
+
+                <p>
+                    Monitor employee attendance with secure
+                    clock-in and clock-out systems.
+                </p>
             </div>
+
         </div>
 
     </div>
+
 </section>
 
 
 <!-- FOOTER -->
+
 <footer class="footer">
+
     <div class="container footer-grid">
 
         <div>
             <h4>Solutions</h4>
+
             <ul>
                 <li>Payroll</li>
                 <li>Attendance</li>
                 <li>Leave Management</li>
+                <li>Employee Records</li>
             </ul>
         </div>
 
         <div>
             <h4>Support</h4>
+
             <ul>
-                <li>Pricing</li>
-                <li>Documentation</li>
-                <li>Guides</li>
+                <li>Help Center</li>
+                <li>User Guide</li>
+                <li>Contact Support</li>
             </ul>
         </div>
 
         <div>
             <h4>Company</h4>
+
             <ul>
-                <li>About</li>
-                <li>Blog</li>
-                <li>Jobs</li>
+                <li>About Us</li>
+                <li>Contact</li>
+                <li>Privacy Policy</li>
             </ul>
         </div>
 
         <div>
             <h4>Legal</h4>
+
             <ul>
-                <li>Claim</li>
-                <li>Privacy</li>
-                <li>Terms</li>
+                <li>Terms & Conditions</li>
+                <li>Privacy Policy</li>
             </ul>
         </div>
 
@@ -321,5 +167,5 @@
     <div class="footer-bottom">
         © 2025 Employee Management System. All rights reserved.
     </div>
-</footer>
 
+</footer>

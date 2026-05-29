@@ -56,7 +56,7 @@ namespace EmployeeManagementSystem.Controllers
                 return View(model);
             }
             // 3️⃣ Get RoleId safely (IMPORTANT FIX)
-            int roleId = employee.RoleId;
+            int? roleId = employee.RoleId;
             if (roleId == 0)
             {
                 ViewBag.Error = "Role not assigned to employee";
@@ -70,10 +70,6 @@ namespace EmployeeManagementSystem.Controllers
                 roleName = "Employee";
             }
 
-            // 🔥 Get Role Name from Roles Table
-            //string roleName = _da.GetRoleName(employee.RoleId);
-            //string roleName = _da.GetRoleName(employee.RoleId) ?? "Unknown";
-
             if (user != null)
             {
                 // ✅ Session
@@ -86,12 +82,6 @@ namespace EmployeeManagementSystem.Controllers
                 if (employee != null)
                 {
                     HttpContext.Session.SetString("EmployeeId", employee.EmployeeId.ToString());
-
-                    // 🔥 Redirect if profile not complete
-                    if(employee.IsProfileComplete != true)
-                    {
-                        return RedirectToAction("CompleteProfile", "Employee");
-                    }
                 }
                 else
                 {
@@ -113,32 +103,6 @@ namespace EmployeeManagementSystem.Controllers
             return View(model);
         }
 
-        // GET: Register
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: Register
-        [HttpPost]
-        public IActionResult Register(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                bool result = _da.Register(model);
-
-                if (!result)
-                {
-                    ModelState.AddModelError("", "Email already exists");
-                    return View(model);
-                }
-
-                return RedirectToAction("Login");
-            }
-
-            return View(model);
-        }
-
         // GET
         public IActionResult ForgotPassword()
         {
@@ -157,7 +121,7 @@ namespace EmployeeManagementSystem.Controllers
 
             if (user != null)
             {
-                ViewBag.Message = "Password reset link sent to your email";//"Your password is: " + user.Password;
+                ViewBag.Message = "Password reset link sent to your email";
             }
             else
             {
@@ -184,10 +148,9 @@ namespace EmployeeManagementSystem.Controllers
         [HttpPost]
         public IActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            string employeeId =
-                HttpContext.Session.GetString("EmployeeId");
+            string userId = HttpContext.Session.GetString("UserId");
 
-            if (string.IsNullOrEmpty(employeeId))
+            if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Login");
             }
@@ -200,7 +163,7 @@ namespace EmployeeManagementSystem.Controllers
                 return View();
             }
 
-            int id = Convert.ToInt32(employeeId);
+            int id = Convert.ToInt32(userId);
 
             bool result = _da.ChangePassword(
                 id,
@@ -215,8 +178,7 @@ namespace EmployeeManagementSystem.Controllers
                 return View();
             }
 
-            ViewBag.Success =
-                "Password changed successfully";
+            ViewBag.Success = "Password changed successfully";
 
             return View();
         }
@@ -245,14 +207,12 @@ namespace EmployeeManagementSystem.Controllers
 
             if (!result)
             {
-                ViewBag.Message =
-                    "Unable to reset password";
+                ViewBag.Message = "Unable to reset password";
 
                 return View(model);
             }
 
-            TempData["Success"] =
-                "Password reset successful";
+            TempData["Success"] = "Password reset successful";
 
             return RedirectToAction("Login");
         }

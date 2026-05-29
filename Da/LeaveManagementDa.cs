@@ -150,6 +150,24 @@ namespace EmployeeManagementSystem.Da
                 .Include(l => l.LeaveType)
                 .FirstOrDefault(l => l.LeaveId == id);
         }
+        public int GetUsedLeave(int empId)
+        {
+            return _context.Leaves
+                .Where(x =>
+                    x.EmployeeId == empId &&
+                    x.Status == "Approved")
+                .Count();
+        }
+
+        //public (int totalLeave, int usedLeave, int remainingLeave) GetLeaveBalance(int empId)
+        //{
+        //    int totalLeave = 20;
+        //    int usedLeave = _context.Leaves.Where(x => x.EmployeeId == empId && x.Status == "Approved")
+        //        .Count();
+        //    int remainingLeave = totalLeave - usedLeave;
+
+        //    return (totalLeave, usedLeave,remainingLeave);
+        //}
     }
 }
 

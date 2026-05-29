@@ -57,10 +57,15 @@
             Reset
         </a>
     </div>
-
+   
     <div class="col-md-4 text-end d-flex justify-content-end gap-2">
+        <a asp-controller="Reports"
+               asp-action="PayrollReportPdf"
+               class="btn btn-success">
+            Export PDF
+        </a>
         <button type="button"
-                class="btn btn-success"
+                class="btn btn-danger"
                 onclick="window.print()">
             Print
         </button>
@@ -112,7 +117,7 @@
                     </strong>
                 </td>
 
-                <td>@item.Month</td>
+                <td>@item.SalaryMonth</td>
 
             </tr>
         }

@@ -93,9 +93,14 @@
             Filter
         </button>
     </div>
-
+   
     <!-- Print -->
-    <div class="col-md-3 d-flex justify-content-end">
+    <div class="col-md-3 d-flex justify-content-end gap-2">
+        <a asp-controller="Reports"
+               asp-action="AttendanceReportPdf"
+               class="btn btn-success">
+            Export PDF
+        </a>
         <button type="button"
                 onclick="window.print()"
                 class="btn btn-danger">
@@ -140,9 +145,9 @@
                     @item.Date.ToShortDateString()
                 </td>
 
-                <td>@item.CheckInTime</td>
+                <td>@item.CheckIn</td>
 
-                <td>@item.CheckOutTime</td>
+                <td>@item.CheckOut</td>
 
                 <td>
 

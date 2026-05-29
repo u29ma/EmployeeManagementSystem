@@ -124,5 +124,27 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(leave);
         }
+
+        public IActionResult LeaveBalance()
+        {
+            var empIdStr = HttpContext.Session.GetString("EmployeeId");
+
+            if (string.IsNullOrEmpty(empIdStr))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            int empId = Convert.ToInt32(empIdStr);
+            int totalLeave = 20;
+            int usedLeave = _leaveDa.GetUsedLeave(empId);
+            int remainingLeave = totalLeave - usedLeave;
+
+            ViewBag.TotalLeave = totalLeave;
+            ViewBag.UsedLeave = usedLeave;
+            ViewBag.RemainingLeave = remainingLeave;
+
+            return View();
+        }
+
     }
+    
 }

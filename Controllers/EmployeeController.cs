@@ -110,45 +110,7 @@ namespace EmployeeManagementSystem.Controllers
             _employeeDa.DeleteEmployee(id);
             return RedirectToAction("Index");
         }
-
-        public IActionResult CompleteProfile()
-        {
-            var empIdStr = HttpContext.Session.GetString("EmployeeId");
-
-            if (string.IsNullOrEmpty(empIdStr))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            int empId = Convert.ToInt32(empIdStr);
-
-            var emp = _employeeDa.GetEmployeeByID(empId);
-
-            return View(emp);
-        }
-
-        [HttpPost]
-        public IActionResult CompleteProfile(EmployeeModel model)
-        {
-            var empIdStr = HttpContext.Session.GetString("EmployeeId");
-
-            if (string.IsNullOrEmpty(empIdStr))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // 🔐 Secure ID from session
-            model.EmployeeId = Convert.ToInt32(empIdStr);
-
-            _employeeDa.UpdateProfile(model);
-
-            return RedirectToAction("Index", "Dashboard");
-        }
+       
         public IActionResult Profile()
         {
             string employeeId = HttpContext.Session.GetString("EmployeeId");
@@ -164,12 +126,6 @@ namespace EmployeeManagementSystem.Controllers
 
             return View(model);
 
-            //if (employee == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(employee);
         }
     }
 }
